@@ -18,8 +18,9 @@ export default function Home() {
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [status, setStatus] = useState('');
-  const [created, setCreated] = useState(null);
-  const [updated, setUpdated] = useState(null);
+  const [created, setCreated] = useState('');
+  const [updated, setUpdated] = useState('');
+  const [isUpdating, setIsUpdating] = useState(-1);
 
   const classes = useStyles();
 
@@ -27,15 +28,17 @@ export default function Home() {
 
   const saveChanges = () => {
     let store = JSON.parse(localStorage.getItem('users'));
-    store.push({email: email, name: name, phoneNumber: phoneNumber, created: created, updated: updated, redactItem: 'redact', deleteItem: 'delete' });
+    store.push({email: email, name: name, phoneNumber: phoneNumber, created: created, updated: updated});
     localStorage.setItem('users', JSON.stringify(store));
     setChangeUser(true)
     setNewItem(false)
   }
 
   useEffect (() => {
-    setUsers(JSON.parse(localStorage.getItem('users')))
-    setChangeUser(false)
+    if(changeUser){
+      setUsers(JSON.parse(localStorage.getItem('users')))
+      setChangeUser(false)
+    }
   }, [changeUser])
 
 
@@ -50,11 +53,56 @@ export default function Home() {
     store.splice(pos, 1);
     localStorage.setItem('users', JSON.stringify(store));
     setChangeUser(true);
+  }
 
-    console.log(parent.firstElementChild.innerHTML);
+  const cancelUpdate = () => {
+    setIsUpdating(-1);
+  }
+
+  const updateRow = (e) => {
+    setChangeUser(true)
+    e.preventDefault();
+    let parent = e.target.closest('.row');
+    let pos = parent.firstElementChild.innerHTML - 1;
+    setIsUpdating(pos);
+  }
+
+  const saveUpdate = () => {
+    let store = JSON.parse(localStorage.getItem('users'));
+    store[isUpdating] = {email: email, name: name, phoneNumber: phoneNumber, created: created, updated: updated}
+    localStorage.setItem('users', JSON.stringify(store));
+    setIsUpdating(-1);
+    setChangeUser(true);
   }
 
    
+  let tabBody = users.map((row, index) => (
+    index != isUpdating ?
+            <TableRow key={index} className='row'>
+              <TableCell align="right">{index+1}</TableCell>
+              <TableCell align="right"> {row.email} </TableCell>
+              <TableCell align="right">{row.phoneNumber}</TableCell>
+              <TableCell align="right">{row.name}</TableCell>
+              <TableCell align="right">{row.status}</TableCell>
+              <TableCell align="right">{row.created}</TableCell>
+              <TableCell align="right">{row.updated}</TableCell>
+              <TableCell align="right"><Button variant='outlined' onClick={updateRow}>Redact</Button></TableCell>
+              <TableCell align="right"><Button variant='outlined' onClick={deleteRow}>Delete</Button></TableCell>
+            </TableRow>
+    :
+      <TableRow>
+              <TableCell align="right" ></TableCell>
+              <TableCell align="right" ><TextField defaultValue={row.email} onChange={(e)=>setEmail(e.target.value)}/></TableCell>
+              <TableCell align="right" ><TextField defaultValue={row.name} onChange={(e)=>setName(e.target.value)}/></TableCell>
+              <TableCell align="right" ><TextField  defaultValue={row.status} onChange={(e)=>setStatus(e.target.value)}/></TableCell>
+              <TableCell align="right"><TextField  defaultValue={row.phoneNumber} onChange={(e)=>setPhoneNumber(e.target.value)} /></TableCell>
+              <TableCell align="right"><TextField  defaultValue={row.created} onChange={(e)=>setCreated(new Date())}/></TableCell>
+              <TableCell align="right"><TextField  defaultValue={row.updated} onChange={(e)=>setUpdated(new Date())}/></TableCell>
+              <TableCell align="right"><Button variant='outlined' onClick={saveUpdate}>Save</Button></TableCell>
+              <TableCell align="right"><Button variant='outlined' onClick={cancelUpdate}>Cancel</Button></TableCell>
+            </TableRow>
+ 
+          ))
 
   return (
     <div>
@@ -74,19 +122,7 @@ export default function Home() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {users.map((row, index) => (
-            <TableRow key={index} className='row'>
-              <TableCell align="right">{index+1}</TableCell>
-              <TableCell align="right"> {row.email} </TableCell>
-              <TableCell align="right">{row.phoneNumber}</TableCell>
-              <TableCell align="right">{row.name}</TableCell>
-              <TableCell align="right">{row.status}</TableCell>
-              <TableCell align="right">{row.created}</TableCell>
-              <TableCell align="right">{row.updated}</TableCell>
-              <TableCell align="right"><Button variant='outlined'>Redact</Button></TableCell>
-              <TableCell align="right"><Button variant='outlined' onClick={deleteRow}>Delete</Button></TableCell>
-            </TableRow>
-          ))}
+          {tabBody}
     
     {newItem && (
       <TableRow>
