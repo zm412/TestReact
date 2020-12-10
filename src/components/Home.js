@@ -27,7 +27,7 @@ export default function Home() {
 
   const saveChanges = () => {
     let store = JSON.parse(localStorage.getItem('users'));
-    store.push({email: email, name: name, phoneNumber: phoneNumber, created: created, updated: updated});
+    store.push({email: email, name: name, phoneNumber: phoneNumber, created: created, updated: updated, redactItem: 'redact', deleteItem: 'delete' });
     localStorage.setItem('users', JSON.stringify(store));
     setNewUser(true)
     setNewItem(false)
@@ -56,7 +56,6 @@ export default function Home() {
             <TableCell  component="th" scope="row" align="right">Created</TableCell>
             <TableCell  component="th" scope="row" align="right">Updated</TableCell>
             <TableCell  component="th" scope="row" align="right">Redact</TableCell>
-            <TableCell  component="th" scope="row" align="right">Update</TableCell>
             <TableCell  component="th" scope="row" align="right">Delete</TableCell>
           </TableRow>
         </TableHead>
@@ -69,9 +68,8 @@ export default function Home() {
               <TableCell align="right">{row.status}</TableCell>
               <TableCell align="right">{row.created}</TableCell>
               <TableCell align="right">{row.updated}</TableCell>
-              <TableCell align="right">{row.redactItem}</TableCell>
-              <TableCell align="right">{row.updateItem}</TableCell>
-              <TableCell align="right">{row.deleteItem}</TableCell>
+              <TableCell align="right"><Button variant='outlined'>Redact</Button></TableCell>
+              <TableCell align="right"><Button variant='outlined'>Delete</Button></TableCell>
             </TableRow>
           ))}
     
@@ -83,9 +81,8 @@ export default function Home() {
               <TableCell align="right"><TextField onChange={(e)=>setPhoneNumber(e.target.value)} /></TableCell>
               <TableCell align="right"><TextField onChange={(e)=>setCreated(new Date())}/></TableCell>
               <TableCell align="right"><TextField onChange={(e)=>setUpdated(new Date())}/></TableCell>
-              <TableCell align="right"><Button variant='contained'>Redact</Button></TableCell>
-              <TableCell align="right"><Button variant='contained'>Update</Button></TableCell>
-              <TableCell align="right"><Button variant='contained'>Delete</Button></TableCell>
+              <TableCell align="right"></TableCell>
+              <TableCell align="right"></TableCell>
             </TableRow>
           )}
     
