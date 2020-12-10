@@ -11,7 +11,9 @@ const useStyles = makeStyles({
 
 export default function Home() {
 
-  const [users, setUsers] = useState(JSON.parse(localStorage.getItem('users')))
+//  localStorage.setItem('users', JSON.stringify([ {id: 1, email: 'kjlj', phoneNumber: 'lkjljlj', name: 'ljljlk', status: 'ljljlkj', created: 'lkjljlk', updated: 'lj;ljkl'} ]))
+
+  const [users, setUsers] = useState(JSON.parse(localStorage.getItem('users')));
   const [changeUser, setChangeUser] = useState(false);
   const [newItem, setNewItem] = useState(false);
   const [id, setId] = useState('');
@@ -36,29 +38,49 @@ export default function Home() {
   }
 
   const searchByEmail = () => {
+    setIsCompressed(false);
     setIsCompressed(true);
     let store = JSON.parse(localStorage.getItem('users'));
     let newStore = store.filter(item => item.email == searchEmail);
-    setUsers(newStore)
+    setUsers(newStore);
+    
   }
 
   const searchByPhone = () => {
+    setIsCompressed(false);
+    setIsCompressed(true);
     let store = JSON.parse(localStorage.getItem('users'));
-    store.filter(item => item.phoneNumber == searchPhone);
-    setUsers(store)
+    let newStore = store.filter(item => item.phoneNumber == searchPhone);
+    setUsers(newStore);
+  }
+
+
+   const rememberState = (pos) => {
+    let store = JSON.parse(localStorage.getItem('users'));
+
+      setId(store[pos].id);
+      setEmail(store[pos].email);
+      setPhoneNumber(store[pos].phoneNumber);
+      setName(store[pos].name);
+      setCreated(store[pos].created);
+      setUpdated(store[pos].updated);
+    console.log(email,  phoneNumber,name, status)
   }
 
   const removeFilter = () => {
     let store = JSON.parse(localStorage.getItem('users'));
-    setUsers(store)
-    setIsCompressed(false)
+    setUsers(store);
+    setSearchEmail('');
+    setSearchPhone('');
   }
 
 
 
-  const saveChanges = () => {
+  const saveNewItem = () => {
     let store = JSON.parse(localStorage.getItem('users'));
     let newId = store[store.length - 1].id + 1;
+    console.log(newId)
+    console.log(store)
     store.push({id: newId,email: email, phoneNumber: phoneNumber, name: name, status: status, created: created, updated: updated});
     localStorage.setItem('users', JSON.stringify(store));
     setChangeUser(true)
@@ -88,43 +110,24 @@ export default function Home() {
     let id = parent.firstElementChild.innerHTML;
     let store = JSON.parse(localStorage.getItem('users'));
     let newStore = store.filter(item => item.id != id)
+    console.log(newStore)
     localStorage.setItem('users', JSON.stringify(newStore));
     setChangeUser(true);
   }
 
+   const cancelUpdate = () => {
+    setIsUpdating(-1);
+  }
+
   const updateRow = (e) => {
+    setChangeUser(true)
     e.preventDefault();
     let parent = e.target.closest('.row');
-    let id = parent.firstElementChild.innerHTML;
-    let posLocal = currentPos(id, users);
-    let store = JSON.parse(localStorage.getItem('users'));
-    let posGlobal = currentPos(id, store);
-    rememberState(posGlobal)
-    setIsUpdating(posGlobal);
-    setChanged(posLocal);
-  }
-
-  const cancelUpdate = () =>  setIsUpdating(-1)
-
-
-  const rememberState = (pos) => {
-    let store = JSON.parse(localStorage.getItem('users'));
-
-      setId(store[pos].id);
-      setEmail(store[pos].email);
-      setPhoneNumber(store[pos].phoneNumber);
-      setName(store[pos].name);
-      setCreated(store[pos].created);
-      setUpdated(store[pos].updated);
-  }
-
-  const saveUpdate = () => {
-    let store = JSON.parse(localStorage.getItem('users'));
-    store[isUpdating] = {id: id, email: email, phoneNumber: phoneNumber, name: name, status: status, created: created, updated: updated}
-    localStorage.setItem('users', JSON.stringify(store));
-    console.log(isUpdating)
-    setIsUpdating(-1);
-    setChangeUser(true);
+    let pos = parent.firstElementChild.innerHTML - 1;
+    rememberState(pos)
+    setIsUpdating(pos);
+    e.preventDefault();
+     setChangeUser(true);
   }
  
   const onChangeValue = (e) => {
@@ -139,6 +142,13 @@ export default function Home() {
     eval(key);
   }
 
+   const saveUpdate = () => {
+    let store = JSON.parse(localStorage.getItem('users'));
+    store[isUpdating] = {id: id, email: email, name: name, phoneNumber: phoneNumber, created: created, updated: updated}
+    localStorage.setItem('users', JSON.stringify(store));
+    setIsUpdating(-1);
+    setChangeUser(true);
+  }
 
    
   let tabBody = users.map((row, index) => (
@@ -197,7 +207,7 @@ export default function Home() {
           <TableRow>
             <TableCell align="right"></TableCell>
             <TableCell align="right" ><TextField id='SearchEmail' onChange={onChangeValue}/><Button onClick={searchByEmail} variant='outlined'>Search</Button></TableCell>
-            <TableCell align="right"><TextField id='SearchPhone' onChange={onChangeValue} /><Button onClick={searchByPhone} variant='outlined'>Search</Button></TableCell>
+            <TableCell align="right"><TextField id='SearchPhone'  onChange={onChangeValue} /><Button onClick={searchByPhone} variant='outlined'>Search</Button></TableCell>
             <TableCell align="right"></TableCell>
             <TableCell align="right" >
                 <Select defaultValue='client' name='Status' onChange={onChangeValue} >
@@ -249,7 +259,7 @@ export default function Home() {
     {
       newItem && (
         <div>
-          <Button variant='contained' onClick={saveChanges}>Save new item</Button>
+          <Button variant='contained' onClick={saveNewItem}>Save new item</Button>
           <Button variant='contained' onClick={closeAddItem}>Cancel</Button>
         </div>
       )
