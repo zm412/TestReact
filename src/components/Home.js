@@ -41,6 +41,8 @@ export default function Home() {
     }
   }, [changeUser])
 
+   
+  
 
   const addItem = () =>  setNewItem(true);
   const closeAddItem = () => setNewItem(false);
@@ -59,18 +61,34 @@ export default function Home() {
     setIsUpdating(-1);
   }
 
+
+  const rememberState = (pos) => {
+    let store = JSON.parse(localStorage.getItem('users'));
+
+      setEmail(store[pos].email);
+      setPhoneNumber(store[pos].phoneNumber);
+      setName(store[pos].name);
+      setCreated(store[pos].created);
+      setUpdated(store[pos].updated);
+    console.log(email,  phoneNumber,name, status)
+  }
+
   const updateRow = (e) => {
     setChangeUser(true)
     e.preventDefault();
     let parent = e.target.closest('.row');
     let pos = parent.firstElementChild.innerHTML - 1;
+    rememberState(pos)
     setIsUpdating(pos);
   }
 
-  const saveUpdate = () => {
+  const saveUpdate = async () => {
+    await rememberState(isUpdating);
+    console.log(email,  phoneNumber,name, status)
     let store = JSON.parse(localStorage.getItem('users'));
-    store[isUpdating] = {email: email, name: name, phoneNumber: phoneNumber, created: created, updated: updated}
+    store[isUpdating] = {email: email, phoneNumber: phoneNumber, name: name, created: created, updated: updated}
     localStorage.setItem('users', JSON.stringify(store));
+    console.log(isUpdating)
     setIsUpdating(-1);
     setChangeUser(true);
   }
@@ -91,16 +109,16 @@ export default function Home() {
             </TableRow>
     :
       <TableRow>
-              <TableCell align="right" ></TableCell>
-              <TableCell align="right" ><TextField defaultValue={row.email} onChange={(e)=>setEmail(e.target.value)}/></TableCell>
-              <TableCell align="right" ><TextField defaultValue={row.name} onChange={(e)=>setName(e.target.value)}/></TableCell>
-              <TableCell align="right" ><TextField  defaultValue={row.status} onChange={(e)=>setStatus(e.target.value)}/></TableCell>
-              <TableCell align="right"><TextField  defaultValue={row.phoneNumber} onChange={(e)=>setPhoneNumber(e.target.value)} /></TableCell>
-              <TableCell align="right"><TextField  defaultValue={row.created} onChange={(e)=>setCreated(new Date())}/></TableCell>
-              <TableCell align="right"><TextField  defaultValue={row.updated} onChange={(e)=>setUpdated(new Date())}/></TableCell>
-              <TableCell align="right"><Button variant='outlined' onClick={saveUpdate}>Save</Button></TableCell>
-              <TableCell align="right"><Button variant='outlined' onClick={cancelUpdate}>Cancel</Button></TableCell>
-            </TableRow>
+        <TableCell align="right">{index+1}</TableCell>
+        <TableCell align="right" ><TextField defaultValue={row.email} onChange={(e)=>setEmail(e.target.value)}/></TableCell>
+        <TableCell align="right"><TextField  defaultValue={row.phoneNumber} onChange={(e)=>setPhoneNumber(e.target.value)} /></TableCell>
+        <TableCell align="right" ><TextField defaultValue={row.name} onChange={(e)=>setName(e.target.value)}/></TableCell>
+        <TableCell align="right" ><TextField  defaultValue={row.status} onChange={(e)=>setStatus(e.target.value)}/></TableCell>
+        <TableCell align="right"><TextField  defaultValue={row.created} onChange={(e)=>setCreated(new Date())}/></TableCell>
+        <TableCell align="right"><TextField  defaultValue={row.updated} onChange={(e)=>setUpdated(new Date())}/></TableCell>
+        <TableCell align="right"><Button variant='outlined' onClick={saveUpdate}>Save</Button></TableCell>
+        <TableCell align="right"><Button variant='outlined' onClick={cancelUpdate}>Cancel</Button></TableCell>
+        </TableRow>
  
           ))
 
