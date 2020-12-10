@@ -26,6 +26,10 @@ yarn-error.log*
 /out-tsc
 # VIM
 *.swp
+*.swo
+
+*.swn
+
 *package-lock.json
 
 # Runtime data

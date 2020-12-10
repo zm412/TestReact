@@ -1,6 +1,6 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
-import {TextField, Container,Paper,Table, TableContainer, TableHead, TableRow, TableBody, TableCell, Button, Grid, Typography, Breadcrumbs} from  '@material-ui/core';
+import {TextField,Select, MenuItem, Container,Paper,Table, TableContainer, TableHead, TableRow, TableBody, TableCell, Button, Grid, Typography, Breadcrumbs} from  '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
@@ -28,7 +28,7 @@ export default function Home() {
 
   const saveChanges = () => {
     let store = JSON.parse(localStorage.getItem('users'));
-    store.push({email: email, name: name, phoneNumber: phoneNumber, created: created, updated: updated});
+    store.push({email: email, phoneNumber: phoneNumber, name: name, status: status, created: created, updated: updated});
     localStorage.setItem('users', JSON.stringify(store));
     setChangeUser(true)
     setNewItem(false)
@@ -44,7 +44,11 @@ export default function Home() {
    
   
 
-  const addItem = () =>  setNewItem(true);
+  const addItem = () =>{
+    setNewItem(true);
+    setCreated(new Date()) ;
+    setUpdated(new Date()); 
+  } 
   const closeAddItem = () => setNewItem(false);
 
   const deleteRow = (e) => {
@@ -86,11 +90,23 @@ export default function Home() {
     await rememberState(isUpdating);
     console.log(email,  phoneNumber,name, status)
     let store = JSON.parse(localStorage.getItem('users'));
-    store[isUpdating] = {email: email, phoneNumber: phoneNumber, name: name, created: created, updated: updated}
+    store[isUpdating] = {email: email, phoneNumber: phoneNumber, name: name, status: status, created: created, updated: updated}
     localStorage.setItem('users', JSON.stringify(store));
     console.log(isUpdating)
     setIsUpdating(-1);
     setChangeUser(true);
+  }
+ 
+  const onChangeValue = (e) => {
+    e.preventDefault();
+    let key;
+    if(e.target.id){
+      key = 'set' + e.target.id + '("' + e.target.value + '")';
+    }else{
+      key = 'set' + e.target.name + '("' + e.target.value + '")';
+    }
+    setUpdated(new Date());
+    eval(key);
   }
 
    
@@ -110,12 +126,19 @@ export default function Home() {
     :
       <TableRow>
         <TableCell align="right">{index+1}</TableCell>
-        <TableCell align="right" ><TextField defaultValue={row.email} onChange={(e)=>setEmail(e.target.value)}/></TableCell>
-        <TableCell align="right"><TextField  defaultValue={row.phoneNumber} onChange={(e)=>setPhoneNumber(e.target.value)} /></TableCell>
-        <TableCell align="right" ><TextField defaultValue={row.name} onChange={(e)=>setName(e.target.value)}/></TableCell>
-        <TableCell align="right" ><TextField  defaultValue={row.status} onChange={(e)=>setStatus(e.target.value)}/></TableCell>
-        <TableCell align="right"><TextField  defaultValue={row.created} onChange={(e)=>setCreated(new Date())}/></TableCell>
-        <TableCell align="right"><TextField  defaultValue={row.updated} onChange={(e)=>setUpdated(new Date())}/></TableCell>
+        <TableCell align="right" ><TextField id='Email' defaultValue={row.email} onChange={onChangeValue}/></TableCell>
+        <TableCell align="right"><TextField id='PhoneNumber'  defaultValue={row.phoneNumber} onChange={onChangeValue} /></TableCell>
+        <TableCell align="right" ><TextField id='Name' defaultValue={row.name} onChange={onChangeValue}/></TableCell>
+        <TableCell align="right" >
+            <Select id='Status' name='Status' defaultValue={row.status} onChange={onChangeValue} >
+              <MenuItem value='client'>Client</MenuItem>
+              <MenuItem value='partner'>Partner</MenuItem>
+              <MenuItem value='admin'>Admin</MenuItem>
+            </Select>
+        </TableCell>
+
+        <TableCell align="right">{row.created}</TableCell>
+        <TableCell align="right">{row.updated}</TableCell>
         <TableCell align="right"><Button variant='outlined' onClick={saveUpdate}>Save</Button></TableCell>
         <TableCell align="right"><Button variant='outlined' onClick={cancelUpdate}>Cancel</Button></TableCell>
         </TableRow>
@@ -145,14 +168,21 @@ export default function Home() {
     {newItem && (
       <TableRow>
               <TableCell align="right" ></TableCell>
-              <TableCell align="right" ><TextField onChange={(e)=>setEmail(e.target.value)}/></TableCell>
-              <TableCell align="right" ><TextField onChange={(e)=>setName(e.target.value)}/></TableCell>
-              <TableCell align="right" ><TextField onChange={(e)=>setStatus(e.target.value)}/></TableCell>
-              <TableCell align="right"><TextField onChange={(e)=>setPhoneNumber(e.target.value)} /></TableCell>
-              <TableCell align="right"><TextField onChange={(e)=>setCreated(new Date())}/></TableCell>
-              <TableCell align="right"><TextField onChange={(e)=>setUpdated(new Date())}/></TableCell>
-              <TableCell align="right"></TableCell>
-              <TableCell align="right"></TableCell>
+              <TableCell align="right" ><TextField id='Email' onChange={onChangeValue}/></TableCell>
+              <TableCell align="right"><TextField id='PhoneNumber' onChange={onChangeValue} /></TableCell>
+              <TableCell align="right" ><TextField id='Name' onChange={onChangeValue}/></TableCell>
+              <TableCell align="right" >
+                <Select defaultValue='client' name='Status' onChange={onChangeValue} >
+                  <MenuItem value='client'>Client</MenuItem>
+                  <MenuItem value='partner'>Partner</MenuItem>
+                  <MenuItem value='admin'>Admin</MenuItem>
+                </Select>
+              </TableCell>
+
+              <TableCell align="right"><TextField disabled /></TableCell>
+              <TableCell align="right"><TextField disabled /></TableCell>
+              <TableCell align="right" ></TableCell>
+              <TableCell align="right" ></TableCell>
             </TableRow>
           )}
     
@@ -169,7 +199,7 @@ export default function Home() {
     {
       newItem && (
         <div>
-          <Button variant='contained' onClick={saveChanges}>Save changes</Button>
+          <Button variant='contained' onClick={saveChanges}>Save new item</Button>
           <Button variant='contained' onClick={closeAddItem}>Cancel</Button>
         </div>
       )
