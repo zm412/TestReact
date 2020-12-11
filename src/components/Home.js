@@ -3,6 +3,7 @@ import {useState, useEffect} from 'react';
 import {TextField,Select, MenuItem, Container,Paper,Table, TableContainer, TableHead, TableRow, TableBody, TableCell, Button, Grid, Typography, Breadcrumbs} from  '@material-ui/core';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import FilterBox from './FilterBox';
+import TableBox from './TableBox';
 
 
 const StyledTableCell = withStyles((theme) => ({
@@ -145,10 +146,9 @@ export default function Home() {
     setChangeUser(true)
     e.preventDefault();
     let parent = e.target.closest('.row');
-    let pos = parent.firstElementChild.innerHTML - 1;
+    let pos = parent.firstElementChild.innerHTML -1;
     rememberState(pos)
     setIsUpdating(pos);
-    e.preventDefault();
      setChangeUser(true);
   }
  
@@ -172,92 +172,14 @@ export default function Home() {
     setChangeUser(true);
   }
 
-   
-  let tabBody = users.map((row, index) => (
-    index != isUpdating ?
-      <StyledTableRow key={index} className='row'>
-        <StyledTableCell>{row.id}</StyledTableCell>
-        <StyledTableCell>{row.email} </StyledTableCell>
-        <StyledTableCell>{row.phoneNumber}</StyledTableCell>
-        <StyledTableCell>{row.name}</StyledTableCell>
-        <StyledTableCell>{row.status}</StyledTableCell>
-        <StyledTableCell>{row.created}</StyledTableCell>
-        <StyledTableCell>{row.updated}</StyledTableCell>
-        <StyledTableCell><Button variant='outlined'  color='primary' size='small' onClick={updateRow}>Redact</Button></StyledTableCell>
-        <StyledTableCell><Button variant='outlined'  color='primary' size='small' onClick={deleteRow}>Delete</Button></StyledTableCell>
-      </StyledTableRow>
-    :
-      <StyledTableRow>
-        <StyledTableCell>{row.id}</StyledTableCell>
-        <StyledTableCell><TextField id='Email' defaultValue={row.email} onChange={onChangeValue}/></StyledTableCell>
-        <StyledTableCell><TextField id='PhoneNumber'  defaultValue={row.phoneNumber} onChange={onChangeValue} /></StyledTableCell>
-        <StyledTableCell><TextField id='Name' defaultValue={row.name} onChange={onChangeValue}/></StyledTableCell>
-        <StyledTableCell>
-            <Select id='Status' name='Status' defaultValue={row.status} onChange={onChangeValue} >
-              <MenuItem value='client'>Client</MenuItem>
-              <MenuItem value='partner'>Partner</MenuItem>
-              <MenuItem value='admin'>Admin</MenuItem>
-            </Select>
-        </StyledTableCell>
-
-        <StyledTableCell>{row.created}</StyledTableCell>
-        <StyledTableCell>{row.updated}</StyledTableCell>
-        <StyledTableCell><Button variant='outlined'  color='primary' size='small' onClick={saveUpdate}>Save</Button></StyledTableCell>
-        <StyledTableCell><Button variant='outlined'  color='primary' size='small' onClick={cancelUpdate}>Cancel</Button></StyledTableCell>
-        </StyledTableRow>
- 
-          ));
-
+  
   return (
     <div>
 
     <FilterBox forOnChange={onChangeValue} forFilterEmail={searchByEmail} forFilterPhone={searchByPhone} />
 
-    <TableContainer component={Paper}>
-      <Table className={classes.table} size="small" aria-label="a dense table">
-        <TableHead>
-          <StyledTableRow>
-            <StyledTableCell component="th" scope="row" >Id</StyledTableCell>
-            <StyledTableCell component="th" scope="row" >Email</StyledTableCell>
-            <StyledTableCell  component="th" scope="row" >Phone number</StyledTableCell>
-            <StyledTableCell  component="th" scope="row" >Name</StyledTableCell>
-            <StyledTableCell  component="th" scope="row" >Status</StyledTableCell>
-            <StyledTableCell  component="th" scope="row" >Created</StyledTableCell>
-            <StyledTableCell  component="th" scope="row" >Updated</StyledTableCell>
-            <StyledTableCell  component="th" scope="row" >Redact</StyledTableCell>
-            <StyledTableCell  component="th" scope="row" >Delete</StyledTableCell>
-          </StyledTableRow>
-        </TableHead>
-        <TableBody>
+    <TableBox users={users} forOnChange={onChangeValue} isUpd={isUpdating} newItm={newItem} updRow={updateRow} dltRow={deleteRow} saveUpd={saveUpdate} noUpd={cancelUpdate} />
 
-         {tabBody}
-    
-    {newItem && (
-      <StyledTableRow className='row'>
-              <StyledTableCell></StyledTableCell>
-              <StyledTableCell><TextField id='Email' onChange={onChangeValue}/></StyledTableCell>
-              <StyledTableCell><TextField id='PhoneNumber' onChange={onChangeValue} /></StyledTableCell>
-              <StyledTableCell><TextField id='Name' onChange={onChangeValue}/></StyledTableCell>
-              <StyledTableCell>
-                <Select defaultValue='client' name='Status' onChange={onChangeValue} >
-                  <MenuItem value='client'>Client</MenuItem>
-                  <MenuItem value='partner'>Partner</MenuItem>
-                  <MenuItem value='admin'>Admin</MenuItem>
-                </Select>
-              </StyledTableCell>
-
-              <StyledTableCell><TextField disabled /></StyledTableCell>
-              <StyledTableCell><TextField disabled /></StyledTableCell>
-              <StyledTableCell></StyledTableCell>
-              <StyledTableCell></StyledTableCell>
-            </StyledTableRow>
-          )}
-    
-
-
-        </TableBody>
-      </Table>
-    </TableContainer>
 
     { !newItem && (
       <Button variant='contained'  color='primary' size='small' onClick={addItem}>Add item</Button>

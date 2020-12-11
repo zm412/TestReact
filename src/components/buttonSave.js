@@ -88,6 +88,30 @@ export default function ButtonSave({closeRedact, currentValue, dataObj}) {
 
   const idArr = ['email', 'phoneNumber', 'name', 'status', 'created', 'updated', 'redactItem', 'updateItem', 'deleteItem'];
 
+  
+    let data = {
+      email: {
+        temp: this.state.emailTemp,
+        label: "Email",
+        isError: this.state.emailValidErr,
+        isError: this.state.emailValidErr ,
+      },
+      phoneNumber:{
+        temp: this.state.phoneNumberTemp,
+        label: "Номер телефона",
+        isError: this.state.phoneNumberValidErr,
+        messageErr: 'Вы неверно указали номер телефона',
+      },
+      name: {
+        temp: this.state.nameTemp,
+        label: "Имя и фамилия",
+        isError: this.state.nameValidErr,
+        messageErr: 'Вы неверно указали имя',
+      },
+      }
+
+
+
   return (
     <div>
       <Button 
