@@ -1,11 +1,32 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
 import {TextField,Select, MenuItem, Container,Paper,Table, TableContainer, TableHead, TableRow, TableBody, TableCell, Button, Grid, Typography, Breadcrumbs} from  '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import FilterBox from './FilterBox';
+
+
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
+
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+  },
+}))(TableRow);
+
 
 const useStyles = makeStyles({
   table: {
-    minWidth: 650,
+    minWidth: 700,
   },
 });
 
@@ -72,6 +93,7 @@ export default function Home() {
     setUsers(store);
     setSearchEmail('');
     setSearchPhone('');
+    setIsCompressed(false);
   }
 
 
@@ -153,97 +175,82 @@ export default function Home() {
    
   let tabBody = users.map((row, index) => (
     index != isUpdating ?
-            <TableRow key={index} className='row'>
-              <TableCell align="right">{row.id}</TableCell>
-              <TableCell align="right"> {row.email} </TableCell>
-              <TableCell align="right">{row.phoneNumber}</TableCell>
-              <TableCell align="right">{row.name}</TableCell>
-              <TableCell align="right">{row.status}</TableCell>
-              <TableCell align="right">{row.created}</TableCell>
-              <TableCell align="right">{row.updated}</TableCell>
-              <TableCell align="right"><Button variant='outlined' onClick={updateRow}>Redact</Button></TableCell>
-              <TableCell align="right"><Button variant='outlined' onClick={deleteRow}>Delete</Button></TableCell>
-            </TableRow>
+      <StyledTableRow key={index} className='row'>
+        <StyledTableCell>{row.id}</StyledTableCell>
+        <StyledTableCell>{row.email} </StyledTableCell>
+        <StyledTableCell>{row.phoneNumber}</StyledTableCell>
+        <StyledTableCell>{row.name}</StyledTableCell>
+        <StyledTableCell>{row.status}</StyledTableCell>
+        <StyledTableCell>{row.created}</StyledTableCell>
+        <StyledTableCell>{row.updated}</StyledTableCell>
+        <StyledTableCell><Button variant='outlined'  color='primary' size='small' onClick={updateRow}>Redact</Button></StyledTableCell>
+        <StyledTableCell><Button variant='outlined'  color='primary' size='small' onClick={deleteRow}>Delete</Button></StyledTableCell>
+      </StyledTableRow>
     :
-      <TableRow>
-        <TableCell align="right">{row.id}</TableCell>
-        <TableCell align="right" ><TextField id='Email' defaultValue={row.email} onChange={onChangeValue}/></TableCell>
-        <TableCell align="right"><TextField id='PhoneNumber'  defaultValue={row.phoneNumber} onChange={onChangeValue} /></TableCell>
-        <TableCell align="right" ><TextField id='Name' defaultValue={row.name} onChange={onChangeValue}/></TableCell>
-        <TableCell align="right" >
+      <StyledTableRow>
+        <StyledTableCell>{row.id}</StyledTableCell>
+        <StyledTableCell><TextField id='Email' defaultValue={row.email} onChange={onChangeValue}/></StyledTableCell>
+        <StyledTableCell><TextField id='PhoneNumber'  defaultValue={row.phoneNumber} onChange={onChangeValue} /></StyledTableCell>
+        <StyledTableCell><TextField id='Name' defaultValue={row.name} onChange={onChangeValue}/></StyledTableCell>
+        <StyledTableCell>
             <Select id='Status' name='Status' defaultValue={row.status} onChange={onChangeValue} >
               <MenuItem value='client'>Client</MenuItem>
               <MenuItem value='partner'>Partner</MenuItem>
               <MenuItem value='admin'>Admin</MenuItem>
             </Select>
-        </TableCell>
+        </StyledTableCell>
 
-        <TableCell align="right">{row.created}</TableCell>
-        <TableCell align="right">{row.updated}</TableCell>
-        <TableCell align="right"><Button variant='outlined' onClick={saveUpdate}>Save</Button></TableCell>
-        <TableCell align="right"><Button variant='outlined' onClick={cancelUpdate}>Cancel</Button></TableCell>
-        </TableRow>
+        <StyledTableCell>{row.created}</StyledTableCell>
+        <StyledTableCell>{row.updated}</StyledTableCell>
+        <StyledTableCell><Button variant='outlined'  color='primary' size='small' onClick={saveUpdate}>Save</Button></StyledTableCell>
+        <StyledTableCell><Button variant='outlined'  color='primary' size='small' onClick={cancelUpdate}>Cancel</Button></StyledTableCell>
+        </StyledTableRow>
  
           ));
 
   return (
     <div>
+
+    <FilterBox forOnChange={onChangeValue} forFilterEmail={searchByEmail} forFilterPhone={searchByPhone} />
+
     <TableContainer component={Paper}>
       <Table className={classes.table} size="small" aria-label="a dense table">
         <TableHead>
-          <TableRow>
-            <TableCell component="th" scope="row" align="right">Id</TableCell>
-            <TableCell component="th" scope="row" align="right">Email</TableCell>
-            <TableCell  component="th" scope="row" align="right">Phone number</TableCell>
-            <TableCell  component="th" scope="row" align="right">Name</TableCell>
-            <TableCell  component="th" scope="row" align="right">Status</TableCell>
-            <TableCell  component="th" scope="row" align="right">Created</TableCell>
-            <TableCell  component="th" scope="row" align="right">Updated</TableCell>
-            <TableCell  component="th" scope="row" align="right">Redact</TableCell>
-            <TableCell  component="th" scope="row" align="right">Delete</TableCell>
-          </TableRow>
+          <StyledTableRow>
+            <StyledTableCell component="th" scope="row" >Id</StyledTableCell>
+            <StyledTableCell component="th" scope="row" >Email</StyledTableCell>
+            <StyledTableCell  component="th" scope="row" >Phone number</StyledTableCell>
+            <StyledTableCell  component="th" scope="row" >Name</StyledTableCell>
+            <StyledTableCell  component="th" scope="row" >Status</StyledTableCell>
+            <StyledTableCell  component="th" scope="row" >Created</StyledTableCell>
+            <StyledTableCell  component="th" scope="row" >Updated</StyledTableCell>
+            <StyledTableCell  component="th" scope="row" >Redact</StyledTableCell>
+            <StyledTableCell  component="th" scope="row" >Delete</StyledTableCell>
+          </StyledTableRow>
         </TableHead>
         <TableBody>
-          <TableRow>
-            <TableCell align="right"></TableCell>
-            <TableCell align="right" ><TextField id='SearchEmail' onChange={onChangeValue}/><Button onClick={searchByEmail} variant='outlined'>Search</Button></TableCell>
-            <TableCell align="right"><TextField id='SearchPhone'  onChange={onChangeValue} /><Button onClick={searchByPhone} variant='outlined'>Search</Button></TableCell>
-            <TableCell align="right"></TableCell>
-            <TableCell align="right" >
-                <Select defaultValue='client' name='Status' onChange={onChangeValue} >
-                  <MenuItem value='client'>Client</MenuItem>
-                  <MenuItem value='partner'>Partner</MenuItem>
-                  <MenuItem value='admin'>Admin</MenuItem>
-                </Select>
-            </TableCell>
 
-
-            <TableCell align="right"></TableCell>
-            <TableCell align="right"></TableCell>
-            <TableCell align="right"></TableCell>
-            <TableCell align="right"></TableCell>
-          </TableRow>
-          {tabBody}
+         {tabBody}
     
     {newItem && (
-      <TableRow className='row'>
-              <TableCell align="right" ></TableCell>
-              <TableCell align="right" ><TextField id='Email' onChange={onChangeValue}/></TableCell>
-              <TableCell align="right"><TextField id='PhoneNumber' onChange={onChangeValue} /></TableCell>
-              <TableCell align="right" ><TextField id='Name' onChange={onChangeValue}/></TableCell>
-              <TableCell align="right" >
+      <StyledTableRow className='row'>
+              <StyledTableCell></StyledTableCell>
+              <StyledTableCell><TextField id='Email' onChange={onChangeValue}/></StyledTableCell>
+              <StyledTableCell><TextField id='PhoneNumber' onChange={onChangeValue} /></StyledTableCell>
+              <StyledTableCell><TextField id='Name' onChange={onChangeValue}/></StyledTableCell>
+              <StyledTableCell>
                 <Select defaultValue='client' name='Status' onChange={onChangeValue} >
                   <MenuItem value='client'>Client</MenuItem>
                   <MenuItem value='partner'>Partner</MenuItem>
                   <MenuItem value='admin'>Admin</MenuItem>
                 </Select>
-              </TableCell>
+              </StyledTableCell>
 
-              <TableCell align="right"><TextField disabled /></TableCell>
-              <TableCell align="right"><TextField disabled /></TableCell>
-              <TableCell align="right" ></TableCell>
-              <TableCell align="right" ></TableCell>
-            </TableRow>
+              <StyledTableCell><TextField disabled /></StyledTableCell>
+              <StyledTableCell><TextField disabled /></StyledTableCell>
+              <StyledTableCell></StyledTableCell>
+              <StyledTableCell></StyledTableCell>
+            </StyledTableRow>
           )}
     
 
@@ -253,23 +260,24 @@ export default function Home() {
     </TableContainer>
 
     { !newItem && (
-      <Button variant='contained' onClick={addItem}>Add item</Button>
+      <Button variant='contained'  color='primary' size='small' onClick={addItem}>Add item</Button>
     ) }
 
     {
       newItem && (
         <div>
-          <Button variant='contained' onClick={saveNewItem}>Save new item</Button>
-          <Button variant='contained' onClick={closeAddItem}>Cancel</Button>
+          <Button variant='contained'  color='primary' size='small' onClick={saveNewItem}>Save new item</Button>
+          <Button variant='contained'  color='primary' size='small' onClick={closeAddItem}>Cancel</Button>
         </div>
       )
     }
 
     {
       isCompressed && (
-        <Button variant='outlined' onClick={removeFilter}>Remove filter </Button>
+        <Button variant='outlined' color='primary' size='small' onClick={removeFilter}>Remove filter </Button>
       )
     }
+
     </div>
     
   )
