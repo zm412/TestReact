@@ -10,26 +10,34 @@ const useStyles = makeStyles({
   },
 });
 
-export default function FilterBox({forOnChange, forFilterEmail, forFilterPhone }) {
+export default function FilterBox({forOnChange, forFilterEmail, forFilterPhone, forFilterStatus, removeFilter, isCompressed, emailMeaning, phoneMeaning }) {
 
   const classes = useStyles();
   return (
     <div>
       <Box>
-       <TextField id='SearchEmail' onChange={forOnChange}/>
+       <TextField id='SearchEmail' defaultValue='' onChange={forOnChange}/>
        <Button onClick={forFilterEmail}  color='primary' size='small' variant='outlined'>Search</Button>
     </Box>
      <Box> 
-        <TextField id='SearchPhone'  onChange={forOnChange} />
+        <TextField id='SearchPhone' defaultValue='' onChange={forOnChange} />
         <Button onClick={forFilterPhone}  color='primary' size='small' variant='outlined'> Search </Button>
     </Box>
     <Box>
-      <Select defaultValue='client' name='Status' onChange={forOnChange} >
+      <Select defaultValue='client' name='SearchStatus' onChange={forOnChange} >
         <MenuItem value='client'>Client</MenuItem>
         <MenuItem value='partner'>Partner</MenuItem>
         <MenuItem value='admin'>Admin</MenuItem>
       </Select>
+        <Button onClick={forFilterStatus}  color='primary' size='small' variant='outlined'> Search </Button>
     </Box>
+    
+    {
+      isCompressed && (
+        <Button variant='outlined' color='primary' size='small' onClick={removeFilter}>Remove filter </Button>
+      )
+    }
+
   </div>
 
    

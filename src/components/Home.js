@@ -18,11 +18,12 @@ export default function Home() {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState('client');
   const [created, setCreated] = useState('');
   const [updated, setUpdated] = useState('');
   const [searchEmail, setSearchEmail] = useState('');
   const [searchPhone, setSearchPhone] = useState('');
+  const [searchStatus, setSearchStatus] = useState('');
   const [isUpdating, setIsUpdating] = useState(-1);
   const [changed, setChanged] = useState(-1);
   const [isCompressed, setIsCompressed] = useState(false);
@@ -32,6 +33,7 @@ export default function Home() {
   const [open, setOpen] = useState(false);
   let errorArr = [emailValidErr, phoneNumberValidErr, nameValidErr];
   const tel = '+7 989 090 78 90'
+  console.log(searchStatus)
 
   const currentPos = (id, arr) => {
     for( let i = 0; i < arr.length; i++ ){
@@ -64,6 +66,20 @@ export default function Home() {
       eval(validErr);
     }
   }
+
+    const onChangeValueForFilter = (e) => {
+    e.preventDefault();
+    let key;
+    if(e.target.id){
+      key = 'set' + e.target.id + '("' + e.target.value + '")';
+    }else{
+      key = 'set' + e.target.name + '("' + e.target.value + '")';
+    }
+      console.log(key)
+    setUpdated(new Date());
+    eval(key);
+  }
+
  
   const onChangeValue = (e) => {
     e.preventDefault();
@@ -81,9 +97,18 @@ export default function Home() {
     eval(key);
   }
 
+  const filterByStatus = () => {
+    setNewItem(false);
+    setIsCompressed(true);
+    let store = JSON.parse(localStorage.getItem('users'));
+    let newStore = store.filter(item => item.status == searchStatus);
+    setUsers(newStore);
+    
+  }
+
 
   const searchByEmail = () => {
-    setIsCompressed(false);
+    setNewItem(false);
     setIsCompressed(true);
     let store = JSON.parse(localStorage.getItem('users'));
     let newStore = store.filter(item => item.email == searchEmail);
@@ -92,7 +117,7 @@ export default function Home() {
   }
 
   const searchByPhone = () => {
-    setIsCompressed(false);
+    setNewItem(false);
     setIsCompressed(true);
     let store = JSON.parse(localStorage.getItem('users'));
     let newStore = store.filter(item => item.phoneNumber == searchPhone);
@@ -117,6 +142,7 @@ export default function Home() {
     setUsers(store);
     setSearchEmail('');
     setSearchPhone('');
+    setSearchStatus('client');
     setIsCompressed(false);
   }
 
@@ -133,6 +159,8 @@ export default function Home() {
       setChangeUser(true)
       setNewItem(false)
       setOpen(false)
+    setCreated(new Date()) ;
+    setUpdated(new Date()); 
     }
    
   }
@@ -148,10 +176,9 @@ export default function Home() {
   
 
   const addItem = () =>{
+    removeFilter();
     cancelUpdate();
     setNewItem(true);
-    setCreated(new Date()) ;
-    setUpdated(new Date()); 
   } 
   const closeAddItem = () => setNewItem(false);
 
@@ -201,7 +228,7 @@ export default function Home() {
   return (
     <div>
 
-    <FilterBox forOnChange={onChangeValue} forFilterEmail={searchByEmail} forFilterPhone={searchByPhone} />
+    <FilterBox forOnChange={onChangeValueForFilter} forFilterEmail={searchByEmail} forFilterStatus={filterByStatus} forFilterPhone={searchByPhone} isCompressed={isCompressed} removeFilter={removeFilter} emailMeaning={searchEmail} phoneMeaning={searchPhone} />
 
     {
       open && (
@@ -227,12 +254,7 @@ export default function Home() {
       )
     }
 
-    {
-      isCompressed && (
-        <Button variant='outlined' color='primary' size='small' onClick={removeFilter}>Remove filter </Button>
-      )
-    }
-
+    
     </div>
     
   )
