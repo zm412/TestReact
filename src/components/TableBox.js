@@ -30,9 +30,11 @@ const useStyles = makeStyles({
   },
 });
 
-export default function TableBox({users, isUpd, newItm, forOnChange, updRow, dltRow, saveUpd, noUpd }) {
+export default function TableBox({users, isUpd, newItm, errArr, forOnChange, updRow, dltRow, saveUpd, noUpd }) {
+  console.log(errArr)
 
  const classes = useStyles();
+
    
   let tabBody = users.map((row, index) => (
     index != isUpd ?
@@ -55,7 +57,7 @@ export default function TableBox({users, isUpd, newItm, forOnChange, updRow, dlt
         <StyledTableCell><TextField id='PhoneNumber'  defaultValue={row.phoneNumber} onChange={forOnChange} /></StyledTableCell>
         <StyledTableCell><TextField id='Name' defaultValue={row.name} onChange={forOnChange}/></StyledTableCell>
         <StyledTableCell>
-            <Select id='Status' name='Status' defaultValue={row.status} onChange={forOnChange} >
+            <Select id='Status' name='Status' defaultValue='client' onChange={forOnChange} >
               <MenuItem value='client'>Client</MenuItem>
               <MenuItem value='partner'>Partner</MenuItem>
               <MenuItem value='admin'>Admin</MenuItem>

@@ -50,14 +50,53 @@ export default function Home() {
   const [isUpdating, setIsUpdating] = useState(-1);
   const [changed, setChanged] = useState(-1);
   const [isCompressed, setIsCompressed] = useState(false);
-
+  const [emailValidErr, setEmailValidErr] = useState(false);
+  const [phoneNumberValidErr, setPhoneNumberValidErr] = useState(false);
+  const [nameValidErr, setNameValidErr] = useState(false);
   const classes = useStyles();
+  let errorArr = [emailValidErr, phoneNumberValidErr, nameValidErr];
 
   const currentPos = (id, arr) => {
     for( let i = 0; i < arr.length; i++ ){
       if(id == arr[i].id) return i
     }
   }
+
+  const checkFieldValidation = (key) => {
+    let nameExp = /^[A-ЯЁA-Z][а-яёa-z]+\s[A-ЯЁA-Z][а-яёa-z]/;
+    let phoneExp = /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/;
+    let emailExp = /^((([0-9A-Za-z]{1}[-0-9A-z\.]{1,}[0-9A-Za-z]{1})|([0-9А-Яа-я]{1}[-0-9А-я\.]{1,}[0-9А-Яа-я]{1}))@([-A-Za-z]{1,}\.){1,2}[-A-Za-z]{2,})$/u;
+
+
+    let checkKey = key.toLowerCase();
+    let str = eval(checkKey); 
+    console.log(str)
+
+    if(!nameExp.test(str) && !phoneExp.test(str) && !emailExp.test(str)){
+      let validErr = 'set' + key + 'ValidErr' + '(' + true + ')';
+      eval(validErr);
+    }else{
+      let validErr = 'set' + key + 'ValidErr' + '(' + false + ')';
+      eval(validErr);
+    }
+  }
+ 
+  const onChangeValue = (e) => {
+    e.preventDefault();
+    let key;
+    if(e.target.id){
+      key = 'set' + e.target.id + '("' + e.target.value + '")';
+    }else{
+      key = 'set' + e.target.name + '("' + e.target.value + '")';
+    }
+
+    let keyValid =  e.target.id ? e.target.id : e.target.name;
+    checkFieldValidation(keyValid)
+    
+    setUpdated(new Date());
+    eval(key);
+  }
+
 
   const searchByEmail = () => {
     setIsCompressed(false);
@@ -84,9 +123,9 @@ export default function Home() {
       setEmail(store[pos].email);
       setPhoneNumber(store[pos].phoneNumber);
       setName(store[pos].name);
+      setStatus(store[pos].status);
       setCreated(store[pos].created);
       setUpdated(store[pos].updated);
-    console.log(email,  phoneNumber,name, status)
   }
 
   const removeFilter = () => {
@@ -102,8 +141,6 @@ export default function Home() {
   const saveNewItem = () => {
     let store = JSON.parse(localStorage.getItem('users'));
     let newId = store[store.length - 1].id + 1;
-    console.log(newId)
-    console.log(store)
     store.push({id: newId,email: email, phoneNumber: phoneNumber, name: name, status: status, created: created, updated: updated});
     localStorage.setItem('users', JSON.stringify(store));
     setChangeUser(true)
@@ -151,18 +188,6 @@ export default function Home() {
     setIsUpdating(pos);
      setChangeUser(true);
   }
- 
-  const onChangeValue = (e) => {
-    e.preventDefault();
-    let key;
-    if(e.target.id){
-      key = 'set' + e.target.id + '("' + e.target.value + '")';
-    }else{
-      key = 'set' + e.target.name + '("' + e.target.value + '")';
-    }
-    setUpdated(new Date());
-    eval(key);
-  }
 
    const saveUpdate = () => {
     let store = JSON.parse(localStorage.getItem('users'));
@@ -178,7 +203,7 @@ export default function Home() {
 
     <FilterBox forOnChange={onChangeValue} forFilterEmail={searchByEmail} forFilterPhone={searchByPhone} />
 
-    <TableBox users={users} forOnChange={onChangeValue} isUpd={isUpdating} newItm={newItem} updRow={updateRow} dltRow={deleteRow} saveUpd={saveUpdate} noUpd={cancelUpdate} />
+    <TableBox users={users} errArr={errorArr} forOnChange={onChangeValue} isUpd={isUpdating} newItm={newItem} updRow={updateRow} dltRow={deleteRow} saveUpd={saveUpdate} noUpd={cancelUpdate} />
 
 
     { !newItem && (
