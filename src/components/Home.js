@@ -22,7 +22,7 @@ export default function Home() {
   const [created, setCreated] = useState('');
   const [updated, setUpdated] = useState('');
   const [searchEmail, setSearchEmail] = useState('');
-  const [searchPhone, setSearchPhone] = useState('');
+  const [searchPhoneNumber, setSearchPhoneNumber] = useState('');
   const [searchStatus, setSearchStatus] = useState('');
   const [isUpdating, setIsUpdating] = useState(-1);
   const [changed, setChanged] = useState(-1);
@@ -53,9 +53,9 @@ export default function Home() {
     let emailExp = /^((([0-9A-Za-z]{1}[-0-9A-z\.]{1,}[0-9A-Za-z]{1})|([0-9А-Яа-я]{1}[-0-9А-я\.]{1,}[0-9А-Яа-я]{1}))@([-A-Za-z]{1,}\.){1,2}[-A-Za-z]{2,})$/u;
 
 
-    let checkKey = key.split();
-    checkKey[0].toLowerCase();
-    checkKey = checkKey.join();
+    let checkKey = key.split('');
+    checkKey[0] = checkKey[0].toLowerCase();
+    checkKey = checkKey.join('');
     let str = eval(checkKey).value; 
 
     if(!nameExp.test(str) && !phoneExp.test(str) && !emailExp.test(str)){
@@ -97,31 +97,27 @@ export default function Home() {
     eval(key);
   }
 
-  const filterByStatus = () => {
-    setNewItem(false);
-    setIsCompressed(true);
-    let store = JSON.parse(localStorage.getItem('users'));
-    let newStore = store.filter(item => item.status == searchStatus);
-    setUsers(newStore);
+  const filterBy = (e) => {
+
+    e.preventDefault();
+    let id = e.target.closest('.boxSearch').id;
+    let key = id.split('');
+    key[0] = key[0].toLowerCase();
+    key = key.join('');
     
-  }
-
-
-  const searchByEmail = () => {
+    let str = 'search' + id;
+    let search = eval( str );
+    let store = JSON.parse(localStorage.getItem('users'));
+    let newStore = store.filter(item => {
+      console.log(item[key]);
+      console.log(search);
+        return item[key] == search
+    });
+    console.log(newStore)
+    setUsers(newStore);
     setNewItem(false);
     setIsCompressed(true);
-    let store = JSON.parse(localStorage.getItem('users'));
-    let newStore = store.filter(item => item.email == searchEmail);
-    setUsers(newStore);
     
-  }
-
-  const searchByPhone = () => {
-    setNewItem(false);
-    setIsCompressed(true);
-    let store = JSON.parse(localStorage.getItem('users'));
-    let newStore = store.filter(item => item.phoneNumber == searchPhone);
-    setUsers(newStore);
   }
 
 
@@ -141,7 +137,7 @@ export default function Home() {
     let store = JSON.parse(localStorage.getItem('users'));
     setUsers(store);
     setSearchEmail('');
-    setSearchPhone('');
+    setSearchPhoneNumber('');
     setSearchStatus('client');
     setIsCompressed(false);
   }
@@ -228,7 +224,7 @@ export default function Home() {
   return (
     <div>
 
-    <FilterBox forOnChange={onChangeValueForFilter} forFilterEmail={searchByEmail} forFilterStatus={filterByStatus} forFilterPhone={searchByPhone} isCompressed={isCompressed} removeFilter={removeFilter} emailMeaning={searchEmail} phoneMeaning={searchPhone} />
+    <FilterBox forOnChange={onChangeValueForFilter} filterBy={filterBy} isCompressed={isCompressed} removeFilter={removeFilter} emailMeaning={searchEmail} phoneMeaning={searchPhoneNumber} />
 
     {
       open && (

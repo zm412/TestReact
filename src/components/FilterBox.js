@@ -6,30 +6,29 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
   table: {
-    minWidth: 700,
   },
 });
 
-export default function FilterBox({forOnChange, forFilterEmail, forFilterPhone, forFilterStatus, removeFilter, isCompressed, emailMeaning, phoneMeaning }) {
+export default function FilterBox({forOnChange,filterBy, removeFilter, isCompressed, emailMeaning, phoneMeaning }) {
 
   const classes = useStyles();
   return (
     <div>
-      <Box>
-       <TextField id='SearchEmail' defaultValue='' onChange={forOnChange}/>
-       <Button onClick={forFilterEmail}  color='primary' size='small' variant='outlined'>Search</Button>
+      <Box  id='Email' className='boxSearch'>
+       <TextField id='SearchEmail'  defaultValue={emailMeaning} onChange={forOnChange}/>
+       <Button onClick={filterBy}  color='primary' size='small' variant='outlined'>Search</Button>
     </Box>
-     <Box> 
-        <TextField id='SearchPhone' defaultValue='' onChange={forOnChange} />
-        <Button onClick={forFilterPhone}  color='primary' size='small' variant='outlined'> Search </Button>
+     <Box id='PhoneNumber' className='boxSearch'> 
+        <TextField id='SearchPhoneNumber' defaultValue={phoneMeaning} onChange={forOnChange} />
+        <Button onClick={filterBy} color='primary' size='small' variant='outlined'>Search</Button>
     </Box>
-    <Box>
+    <Box id='Status' className='boxSearch'>
       <Select defaultValue='client' name='SearchStatus' onChange={forOnChange} >
         <MenuItem value='client'>Client</MenuItem>
         <MenuItem value='partner'>Partner</MenuItem>
         <MenuItem value='admin'>Admin</MenuItem>
       </Select>
-        <Button onClick={forFilterStatus}  color='primary' size='small' variant='outlined'> Search </Button>
+        <Button onClick={filterBy}  color='primary' size='small' variant='outlined'> Search </Button>
     </Box>
     
     {

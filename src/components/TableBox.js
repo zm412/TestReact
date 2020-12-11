@@ -26,7 +26,7 @@ const StyledTableRow = withStyles((theme) => ({
 
 const useStyles = makeStyles({
   table: {
-    minWidth: 700,
+    maxWidth: 700,
   },
 });
 
@@ -165,7 +165,7 @@ export default function TableBox({users, isUpd, newItm, errArr, forOnChange, upd
 
           </StyledTableRow>
         </TableHead>
-        <TableBody>
+      <TableBody>
 
          {tabBody}
     
