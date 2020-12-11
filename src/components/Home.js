@@ -4,32 +4,8 @@ import {TextField,Select, MenuItem, Container,Paper,Table, TableContainer, Table
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import FilterBox from './FilterBox';
 import TableBox from './TableBox';
+import DialogError from './DialogError';
 
-
-const StyledTableCell = withStyles((theme) => ({
-  head: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  body: {
-    fontSize: 14,
-  },
-}))(TableCell);
-
-const StyledTableRow = withStyles((theme) => ({
-  root: {
-    '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.action.hover,
-    },
-  },
-}))(TableRow);
-
-
-const useStyles = makeStyles({
-  table: {
-    minWidth: 700,
-  },
-});
 
 export default function Home() {
 
@@ -53,7 +29,8 @@ export default function Home() {
   const [emailValidErr, setEmailValidErr] = useState(false);
   const [phoneNumberValidErr, setPhoneNumberValidErr] = useState(false);
   const [nameValidErr, setNameValidErr] = useState(false);
-  const classes = useStyles();
+  const [noSaving, setNoSaving] = useState(false);
+  const [open, setOpen] = useState(false);
   let errorArr = [emailValidErr, phoneNumberValidErr, nameValidErr];
 
   const currentPos = (id, arr) => {
@@ -61,6 +38,8 @@ export default function Home() {
       if(id == arr[i].id) return i
     }
   }
+
+  const handleCloseDialogModal = () => setOpen(false);
 
   const checkFieldValidation = (key) => {
     let nameExp = /^[A-ЯЁA-Z][а-яёa-z]+\s[A-ЯЁA-Z][а-яёa-z]/;
@@ -71,9 +50,7 @@ export default function Home() {
     let checkKey = key.split();
     checkKey[0].toLowerCase();
     checkKey = checkKey.join();
-    console.log(checkKey)
     let str = eval(checkKey).value; 
-    console.log(str)
 
     if(!nameExp.test(str) && !phoneExp.test(str) && !emailExp.test(str)){
       let validErr = 'set' + key + 'ValidErr' + '(' + true + ')';
@@ -95,7 +72,6 @@ export default function Home() {
 
     let keyValid =  e.target.id ? e.target.id : e.target.name;
     checkFieldValidation(keyValid)
-    console.log(keyValid)
     
     setUpdated(new Date());
     eval(key);
@@ -143,12 +119,17 @@ export default function Home() {
 
 
   const saveNewItem = () => {
-    let store = JSON.parse(localStorage.getItem('users'));
-    let newId = store[store.length - 1].id + 1;
-    store.push({id: newId,email: email, phoneNumber: phoneNumber, name: name, status: status, created: created, updated: updated});
-    localStorage.setItem('users', JSON.stringify(store));
-    setChangeUser(true)
-    setNewItem(false)
+    if(errorArr.includes(false)){
+      setNoSaving(true);
+    }else{
+      let store = JSON.parse(localStorage.getItem('users'));
+      let newId = store[store.length - 1].id + 1;
+      store.push({id: newId,email: email, phoneNumber: phoneNumber, name: name, status: status, created: created, updated: updated});
+      localStorage.setItem('users', JSON.stringify(store));
+      setChangeUser(true)
+      setNewItem(false)
+    }
+   
   }
 
   useEffect (() => {
@@ -162,6 +143,7 @@ export default function Home() {
   
 
   const addItem = () =>{
+    cancelUpdate();
     setNewItem(true);
     setCreated(new Date()) ;
     setUpdated(new Date()); 
@@ -174,13 +156,15 @@ export default function Home() {
     let id = parent.firstElementChild.innerHTML;
     let store = JSON.parse(localStorage.getItem('users'));
     let newStore = store.filter(item => item.id != id)
-    console.log(newStore)
     localStorage.setItem('users', JSON.stringify(newStore));
     setChangeUser(true);
   }
 
    const cancelUpdate = () => {
     setIsUpdating(-1);
+    setEmailValidErr(false) ;
+    setPhoneNumberValidErr(false) ;
+    setNameValidErr(false) ;
   }
 
   const updateRow = (e) => {
@@ -194,18 +178,35 @@ export default function Home() {
   }
 
    const saveUpdate = () => {
-    let store = JSON.parse(localStorage.getItem('users'));
-    store[isUpdating] = {id: id, email: email, name: name, phoneNumber: phoneNumber, created: created, updated: updated}
-    localStorage.setItem('users', JSON.stringify(store));
-    setIsUpdating(-1);
-    setChangeUser(true);
+     if(errorArr.includes(false)){
+       setNoSaving(true);
+     }else{
+      setNoSaving(false)
+      let store = JSON.parse(localStorage.getItem('users'));
+      store[isUpdating] = {id: id, email: email, name: name, phoneNumber: phoneNumber, created: created, updated: updated}
+      localStorage.setItem('users', JSON.stringify(store));
+      setIsUpdating(-1);
+      setChangeUser(true);
+     }
   }
 
+  useEffect(() => {
+    noSaving ? setOpen(true) : setOpen(false)
+  }, [ noSaving ])
+
+  console.log(open)
   
   return (
     <div>
 
     <FilterBox forOnChange={onChangeValue} forFilterEmail={searchByEmail} forFilterPhone={searchByPhone} />
+
+    {
+      open && (
+        
+        <DialogError handleClose={handleCloseDialogModal} closeRedact={cancelUpdate} />
+      )
+    }
 
     <TableBox users={users} errArr={errorArr} forOnChange={onChangeValue} isUpd={isUpdating} newItm={newItem} updRow={updateRow} dltRow={deleteRow} saveUpd={saveUpdate} noUpd={cancelUpdate} />
 
