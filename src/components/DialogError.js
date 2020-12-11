@@ -38,36 +38,13 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function DialogError({ handleClose, closeRedact }) {
-  const [open, setOpen] = React.useState(false);
-  const [openSecond, setOpenSecond] = React.useState(false);
-  const [openErr, setOpenErr] = React.useState(false);
+export default function DialogError({open, handleClose, closeRedact }) {
 
   const classes = useStyles();
-
-  const handleClickOpen = () =>  setOpen(true); 
-
-  const handleCloseSecond = () =>  setOpenSecond(false);
-
-  const handleCloseErr = () => {
-    setOpenErr(false);
-    setOpenSecond(false);
-  }
-
-
-  const handleCloseModal = () =>  setOpen(false) ;
-
 
 
   return (
   <div>
-      <Button 
-          className={classes.buttonStyle}
-          style={{color: '#FFFFFF', backgroundColor: '#01BDA7' , width: '300px'}}
-          variant="contained"
-          onClick={handleClickOpen}
-    > Сохранить изменения </Button>
-
 
     <Dialog onClose={handleClose} open={open}>
 

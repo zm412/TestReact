@@ -29,9 +29,9 @@ export default function Home() {
   const [emailValidErr, setEmailValidErr] = useState(false);
   const [phoneNumberValidErr, setPhoneNumberValidErr] = useState(false);
   const [nameValidErr, setNameValidErr] = useState(false);
-  const [noSaving, setNoSaving] = useState(false);
   const [open, setOpen] = useState(false);
   let errorArr = [emailValidErr, phoneNumberValidErr, nameValidErr];
+  const tel = '+7 989 090 78 90'
 
   const currentPos = (id, arr) => {
     for( let i = 0; i < arr.length; i++ ){
@@ -41,8 +41,9 @@ export default function Home() {
 
   const handleCloseDialogModal = () =>{
     setOpen(false);
-    setNoSaving(false)
   } 
+
+  const handleClickOpenModal = () =>  setOpen(true); 
 
   const checkFieldValidation = (key) => {
     let nameExp = /^[A-ЯЁA-Z][а-яёa-z]+\s[A-ЯЁA-Z][а-яёa-z]/;
@@ -122,8 +123,8 @@ export default function Home() {
 
 
   const saveNewItem = () => {
-    if(errorArr.includes(false)){
-      setNoSaving(true);
+    if(errorArr.includes(true)){
+      setOpen(true)
     }else{
       let store = JSON.parse(localStorage.getItem('users'));
       let newId = store[store.length - 1].id + 1;
@@ -131,6 +132,7 @@ export default function Home() {
       localStorage.setItem('users', JSON.stringify(store));
       setChangeUser(true)
       setNewItem(false)
+      setOpen(false)
     }
    
   }
@@ -173,7 +175,6 @@ export default function Home() {
 
   const updateRow = (e) => {
     setChangeUser(true);
-    setNoSaving(false);
     e.preventDefault();
     let parent = e.target.closest('.row');
     let pos = parent.firstElementChild.innerHTML -1;
@@ -184,9 +185,9 @@ export default function Home() {
 
    const saveUpdate = () => {
      if(errorArr.includes(false)){
-      setNoSaving(true);
+       setOpen(true);
      }else{
-      setNoSaving(false)
+       setOpen(false);
       let store = JSON.parse(localStorage.getItem('users'));
       store[isUpdating] = {id: id, email: email, name: name, phoneNumber: phoneNumber, created: created, updated: updated}
       localStorage.setItem('users', JSON.stringify(store));
@@ -194,10 +195,6 @@ export default function Home() {
       setChangeUser(true);
      }
   }
-
-  useEffect(() => {
-    noSaving ? setOpen(true) : setOpen(false)
-  }, [ noSaving ])
 
   console.log(open)
   
@@ -209,7 +206,8 @@ export default function Home() {
     {
       open && (
         
-        <DialogError handleClose={handleCloseDialogModal} closeRedact={cancelUpdate} />
+        <DialogError open={open} handleClose={handleCloseDialogModal} closeRedact={cancelUpdate} />
+        
       )
     }
 
