@@ -39,7 +39,10 @@ export default function Home() {
     }
   }
 
-  const handleCloseDialogModal = () => setOpen(false);
+  const handleCloseDialogModal = () =>{
+    setOpen(false);
+    setNoSaving(false)
+  } 
 
   const checkFieldValidation = (key) => {
     let nameExp = /^[A-ЯЁA-Z][а-яёa-z]+\s[A-ЯЁA-Z][а-яёa-z]/;
@@ -165,21 +168,23 @@ export default function Home() {
     setEmailValidErr(false) ;
     setPhoneNumberValidErr(false) ;
     setNameValidErr(false) ;
+    setOpen(false);
   }
 
   const updateRow = (e) => {
-    setChangeUser(true)
+    setChangeUser(true);
+    setNoSaving(false);
     e.preventDefault();
     let parent = e.target.closest('.row');
     let pos = parent.firstElementChild.innerHTML -1;
     rememberState(pos)
     setIsUpdating(pos);
-     setChangeUser(true);
+    setChangeUser(true);
   }
 
    const saveUpdate = () => {
      if(errorArr.includes(false)){
-       setNoSaving(true);
+      setNoSaving(true);
      }else{
       setNoSaving(false)
       let store = JSON.parse(localStorage.getItem('users'));

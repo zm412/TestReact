@@ -22,17 +22,15 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(4) 
   },
   dialogModal:{
-    height: '300px',
-    width: '600px',
+    height: '30%',
+    width: '60%',
     borderRadius: '25px',
-    border: '1px solid blue',
   },
   boxButton: {
     textAlign: 'center',
   },
   buttonStyle:{
     borderRadius: 41,
-    height: '50px', 
   }
 
 
@@ -63,6 +61,13 @@ export default function DialogError({ handleClose, closeRedact }) {
 
   return (
   <div>
+      <Button 
+          className={classes.buttonStyle}
+          style={{color: '#FFFFFF', backgroundColor: '#01BDA7' , width: '300px'}}
+          variant="contained"
+          onClick={handleClickOpen}
+    > Сохранить изменения </Button>
+
 
     <Dialog onClose={handleClose} open={open}>
 
@@ -79,6 +84,31 @@ export default function DialogError({ handleClose, closeRedact }) {
           > 
               Incorrect Entry
           </Typography>
+    
+          <Box m={3} className={classes.boxButton}>
+            <Button autoFocus 
+              className={classes.buttonStyle}
+              variant="contained" 
+              size='small' 
+              onClick={handleClose} 
+              style={{color: '#FFFFFF', backgroundColor: '#01BDA7', width: '200px'}}
+            >
+                Продолжить редактирование 
+            </Button>
+          </Box>
+          <Box m={3} className={classes.boxButton}>
+            <Button autoFocus  
+              className={classes.buttonStyle}
+              variant='outlined'
+              size='medium' 
+              rounded
+              onClick={closeRedact}
+              style={{ color: '#01BDA7', borderColor: '#01BDA7' , width: '200px'}}
+            >
+                Отменить изменения
+            </Button>
+          </Box>
+
           </div>
     </Dialog>
 
