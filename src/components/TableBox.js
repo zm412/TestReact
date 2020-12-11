@@ -47,15 +47,50 @@ export default function TableBox({users, isUpd, newItm, errArr, forOnChange, upd
         <StyledTableCell>{row.status}</StyledTableCell>
         <StyledTableCell>{row.created}</StyledTableCell>
         <StyledTableCell>{row.updated}</StyledTableCell>
-        <StyledTableCell><Button variant='outlined'  color='primary' size='small' onClick={updRow}>Redact</Button></StyledTableCell>
-        <StyledTableCell><Button variant='outlined'  color='primary' size='small' onClick={dltRow}>Delete</Button></StyledTableCell>
+
+        <StyledTableCell>
+          <Button variant='outlined'  color='primary' size='small' onClick={updRow}>
+            Redact
+          </Button>
+        </StyledTableCell>
+
+        <StyledTableCell>
+          <Button variant='outlined'  color='primary' size='small' onClick={dltRow}>
+            Delete
+          </Button>
+        </StyledTableCell>
+
       </StyledTableRow>
     :
       <StyledTableRow key={index} className='row'>
         <StyledTableCell>{row.id}</StyledTableCell>
-        <StyledTableCell><TextField id='Email' defaultValue={row.email} onChange={forOnChange}/></StyledTableCell>
-        <StyledTableCell><TextField id='PhoneNumber'  defaultValue={row.phoneNumber} onChange={forOnChange} /></StyledTableCell>
-        <StyledTableCell><TextField id='Name' defaultValue={row.name} onChange={forOnChange}/></StyledTableCell>
+
+        <StyledTableCell>
+          <TextField id='Email' 
+            helperText={errArr[0]?'Incorrect entry': ''} 
+            error={errArr[0]} 
+            defaultValue={row.email} 
+            onChange={forOnChange}
+          />
+        </StyledTableCell>
+
+        <StyledTableCell>
+          <TextField 
+            helperText={errArr[1]?'Incorrect entry': ''} 
+            error={errArr[1]} id='PhoneNumber'  
+            defaultValue={row.phoneNumber} 
+            onChange={forOnChange} 
+          />
+        </StyledTableCell>
+
+        <StyledTableCell>
+          <TextField id='Name' 
+            helperText={errArr[2]?'Incorrect entry': ''} 
+            error={errArr[2]} 
+            defaultValue={row.name} 
+            onChange={forOnChange}/>
+        </StyledTableCell>
+
         <StyledTableCell>
             <Select id='Status' name='Status' defaultValue='client' onChange={forOnChange} >
               <MenuItem value='client'>Client</MenuItem>
@@ -66,8 +101,19 @@ export default function TableBox({users, isUpd, newItm, errArr, forOnChange, upd
 
         <StyledTableCell>{row.created}</StyledTableCell>
         <StyledTableCell>{row.updated}</StyledTableCell>
-        <StyledTableCell><Button variant='outlined'  color='primary' size='small' onClick={saveUpd}>Save</Button></StyledTableCell>
-        <StyledTableCell><Button variant='outlined'  color='primary' size='small' onClick={noUpd}>Cancel</Button></StyledTableCell>
+
+        <StyledTableCell>
+          <Button variant='outlined'  color='primary' size='small' onClick={saveUpd}>
+            Save
+          </Button>
+        </StyledTableCell>
+
+        <StyledTableCell>
+          <Button variant='outlined'  color='primary' size='small' onClick={noUpd}>
+            Cancel
+          </Button>
+        </StyledTableCell>
+
         </StyledTableRow>
  
           ));
@@ -80,15 +126,43 @@ export default function TableBox({users, isUpd, newItm, errArr, forOnChange, upd
       <Table className={classes.table} size="small" >
         <TableHead>
           <StyledTableRow>
-            <StyledTableCell component="th" scope="row" >Id</StyledTableCell>
-            <StyledTableCell component="th" scope="row" >Email</StyledTableCell>
-            <StyledTableCell  component="th" scope="row" >Phone number</StyledTableCell>
-            <StyledTableCell  component="th" scope="row" >Name</StyledTableCell>
-            <StyledTableCell  component="th" scope="row" >Status</StyledTableCell>
-            <StyledTableCell  component="th" scope="row" >Created</StyledTableCell>
-            <StyledTableCell  component="th" scope="row" >Updated</StyledTableCell>
-            <StyledTableCell  component="th" scope="row" >Redact</StyledTableCell>
-            <StyledTableCell  component="th" scope="row" >Delete</StyledTableCell>
+
+            <StyledTableCell component="th" scope="row" >
+              Id
+            </StyledTableCell>
+
+            <StyledTableCell component="th" scope="row" >
+              Email
+            </StyledTableCell>
+
+            <StyledTableCell component="th" scope="row" >
+              Phone number
+            </StyledTableCell>
+
+            <StyledTableCell component="th" scope="row" >
+              Name
+            </StyledTableCell>
+
+            <StyledTableCell component="th" scope="row" >
+              Status
+            </StyledTableCell>
+
+            <StyledTableCell component="th" scope="row" >
+              Created
+            </StyledTableCell>
+
+            <StyledTableCell component="th" scope="row" >
+              Updated
+            </StyledTableCell>
+
+            <StyledTableCell component="th" scope="row" >
+              Redact
+            </StyledTableCell>
+
+            <StyledTableCell component="th" scope="row" >
+              Delete
+            </StyledTableCell>
+
           </StyledTableRow>
         </TableHead>
         <TableBody>
@@ -97,23 +171,49 @@ export default function TableBox({users, isUpd, newItm, errArr, forOnChange, upd
     
     {newItm && (
       <StyledTableRow className='row'>
-              <StyledTableCell></StyledTableCell>
-              <StyledTableCell><TextField id='Email' onChange={forOnChange}/></StyledTableCell>
-              <StyledTableCell><TextField id='PhoneNumber' onChange={forOnChange} /></StyledTableCell>
-              <StyledTableCell><TextField id='Name' onChange={forOnChange}/></StyledTableCell>
-              <StyledTableCell>
-                <Select defaultValue='client' name='Status' onChange={forOnChange} >
-                  <MenuItem value='client'>Client</MenuItem>
-                  <MenuItem value='partner'>Partner</MenuItem>
-                  <MenuItem value='admin'>Admin</MenuItem>
-                </Select>
-              </StyledTableCell>
+        <StyledTableCell></StyledTableCell>
 
-              <StyledTableCell><TextField disabled /></StyledTableCell>
-              <StyledTableCell><TextField disabled /></StyledTableCell>
-              <StyledTableCell></StyledTableCell>
-              <StyledTableCell></StyledTableCell>
-            </StyledTableRow>
+        <StyledTableCell>
+          <TextField 
+            helperText={errArr[0]?'Incorrect entry': ''} 
+            error={errArr[0]} 
+            id='Email' 
+            onChange={forOnChange}
+          />
+        </StyledTableCell>
+      
+        <StyledTableCell>
+          <TextField 
+            helperText={errArr[1]?'Incorrect entry': ''} 
+            error={errArr[1]} 
+            id='PhoneNumber' 
+            onChange={forOnChange} 
+          />
+        </StyledTableCell>
+
+        <StyledTableCell>
+          <TextField 
+            id='Name' 
+            error={errArr[2]} 
+            helperText={errArr[2] ?'Incorrect entry': ''} 
+            onChange={forOnChange}
+          />
+        </StyledTableCell>
+
+        <StyledTableCell>
+          <Select defaultValue='client' name='Status' onChange={forOnChange} >
+            <MenuItem value='client'>Client</MenuItem>
+            <MenuItem value='partner'>Partner</MenuItem>
+            <MenuItem value='admin'>Admin</MenuItem>
+          </Select>
+        </StyledTableCell>
+
+        <StyledTableCell><TextField disabled /></StyledTableCell>
+        <StyledTableCell><TextField disabled /></StyledTableCell>
+        <StyledTableCell></StyledTableCell>
+        <StyledTableCell></StyledTableCell>
+      
+      </StyledTableRow>
           )}
     
 

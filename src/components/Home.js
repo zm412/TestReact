@@ -68,8 +68,11 @@ export default function Home() {
     let emailExp = /^((([0-9A-Za-z]{1}[-0-9A-z\.]{1,}[0-9A-Za-z]{1})|([0-9А-Яа-я]{1}[-0-9А-я\.]{1,}[0-9А-Яа-я]{1}))@([-A-Za-z]{1,}\.){1,2}[-A-Za-z]{2,})$/u;
 
 
-    let checkKey = key.toLowerCase();
-    let str = eval(checkKey); 
+    let checkKey = key.split();
+    checkKey[0].toLowerCase();
+    checkKey = checkKey.join();
+    console.log(checkKey)
+    let str = eval(checkKey).value; 
     console.log(str)
 
     if(!nameExp.test(str) && !phoneExp.test(str) && !emailExp.test(str)){
@@ -92,6 +95,7 @@ export default function Home() {
 
     let keyValid =  e.target.id ? e.target.id : e.target.name;
     checkFieldValidation(keyValid)
+    console.log(keyValid)
     
     setUpdated(new Date());
     eval(key);
