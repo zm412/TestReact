@@ -5,6 +5,7 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 import FilterBox from './FilterBox';
 import TableBox from './TableBox';
 import DialogError from './DialogError';
+import Layout from './Header';
 
 
 export default function Home() {
@@ -39,6 +40,10 @@ export default function Home() {
     for( let i = 0; i < arr.length; i++ ){
       if(id == arr[i].id) return i
     }
+  }
+
+  const ifLocalStorIsEmpty = () => {
+
   }
 
   const handleCloseDialogModal = () =>{
