@@ -25,11 +25,17 @@ const StyledTableRow = withStyles((theme) => ({
 }))(TableRow);
 
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   table: {
-    maxWidth: 700,
+    width: '100%',
   },
-});
+  containerTable: {
+    justify: 'center',
+    textAlign: 'center',
+  }
+}))
+  
+
 
 export default function TableBox({users,closeAdd, handleClose, isUpd, newItm,addItem, errArr, forOnChange, updRow, dltRow, saveUpd, noUpd , saveItm}) {
   console.log(errArr)
@@ -67,7 +73,9 @@ export default function TableBox({users,closeAdd, handleClose, isUpd, newItm,add
     <div>
 
 
-    <TableContainer component={Paper}>
+    <Grid container spacing={3} justify='center'>
+      <Grid item xs={11}>
+    <TableContainer className={classes.containerTable} component={Paper}>
       <Table className={classes.table} size="small" >
         <TableHead>
           <StyledTableRow>
@@ -94,23 +102,33 @@ export default function TableBox({users,closeAdd, handleClose, isUpd, newItm,add
         </TableHead>
       <TableBody>
 
+    
          {tabBody}
-    
-    {newItm && (
-      
-      <AddItems forOnChange={forOnChange} errArr={errArr} open={newItm} handleClose={closeAdd} saveItm={saveItm}/>
-     )}
-    
-    { !newItm && (
-      <Button variant='contained'  color='primary' size='small' onClick={addItem}>Add item</Button>
-    ) }
-
+   
 
 
 
         </TableBody>
       </Table>
     </TableContainer>
+    </Grid>
+
+     
+        {newItm && (
+          
+          <AddItems forOnChange={forOnChange} errArr={errArr} open={newItm} handleClose={closeAdd} saveItm={saveItm}/>
+         )}
+        
+
+        { !newItm && (
+        <Grid item xs={12} className={classes.containerTable}>
+          <Button variant='contained'  color='primary' size='small' onClick={addItem}>Add item</Button>
+        </Grid>
+        ) }
+
+
+
+    </Grid>
 
     </div>
     

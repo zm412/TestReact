@@ -12,7 +12,7 @@ import Layout from './Header';
 
 export default function Home() {
 
-//  localStorage.setItem('users', JSON.stringify([ {id: 1, email: 'kjlj', phoneNumber: 'lkjljlj', name: 'ljljlk', status: 'ljljlkj', created: 'lkjljlk', updated: 'lj;ljkl'} ]))
+//  localStorage.setItem('users', JSON.stringify([ {id: 1, email: 'email', phoneNumber: '+7 8235352575', name: 'Firstname Lastname', status: 'client', created: new Date(), updated: new Date()} ]))
 
   const [users, setUsers] = useState(JSON.parse(localStorage.getItem('users')));
   const [changeUser, setChangeUser] = useState(false);
@@ -91,7 +91,6 @@ export default function Home() {
     e.preventDefault();
     let key = 'set' + e.target.name + '("' + e.target.value + '")';
       console.log(key)
-    setUpdated(new Date());
     eval(key);
   }
 
@@ -143,6 +142,7 @@ export default function Home() {
       setEmail(store[pos].email);
       setPhoneNumber(store[pos].phoneNumber);
       setName(store[pos].name);
+      setCreated(store[pos].created);
       setStatus(store[pos].status);
   }
 
@@ -159,7 +159,7 @@ export default function Home() {
      }else{
        setOpen(false);
       let store = JSON.parse(localStorage.getItem('users'));
-      store[updatingRow] = {id: id, email: email, name: name, phoneNumber: phoneNumber,status: status, created: created, updated: updated}
+      store[updatingRow] = {id: id, email: email, name: name, phoneNumber: phoneNumber,status: status, created: created, updated: new Date()}
       localStorage.setItem('users', JSON.stringify(store));
       setUpdatingRow(-1);
       setIsUpdating(false);
@@ -180,13 +180,13 @@ export default function Home() {
     if(errorArr.includes(true) || name == '' || email == '' || phoneNumber == ''){
       setOpen(true)
     }else{
-      setOpen(false)
-      setCreated(new Date()) ;
       setUpdated(new Date()); 
+      setCreated(new Date()); 
+      setOpen(false)
 
       let store = JSON.parse(localStorage.getItem('users'));
       let newId = store[store.length - 1].id + 1;
-      store.push({id: newId,email: email,  name: name,phoneNumber: phoneNumber, status: status, created: created, updated: updated});
+      store.push({id: newId,email: email,  name: name,phoneNumber: phoneNumber, status: status, created: new Date(), updated: new Date()});
       console.log(store)
       localStorage.setItem('users', JSON.stringify(store));
       setChangeUser(true)
@@ -251,7 +251,7 @@ export default function Home() {
   return (
     <div>
 
-    <FilterBox forOnChange={onChangeValue} filterBy={filterBy} isCompressed={isCompressed} removeFilter={removeFilter} emailMeaning={searchEmail} phoneMeaning={searchPhoneNumber} />
+    <FilterBox forOnChange={onChangeValue} filterBy={filterBy} isCompressed={isCompressed} removeFilter={removeFilter} emailMeaning={email} phoneMeaning={phoneNumber} />
 
     { open && (
         

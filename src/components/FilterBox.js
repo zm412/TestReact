@@ -8,6 +8,8 @@ import Icon from '@material-ui/icons/Search';
 
 const useStyles = makeStyles((theme) => ({
   root: {
+  },
+  paper:{
     padding: '2px 4px',
     display: 'flex',
     alignItems: 'center',
@@ -24,6 +26,10 @@ const useStyles = makeStyles((theme) => ({
     height: 28,
     margin: 4,
   },
+  buttonRemove:{
+    justify: 'center',
+    textAlign: 'center',
+  }
 }));
 
 export default function FilterBox({forOnChange,filterBy,handelClose, removeFilter, isCompressed, emailMeaning, phoneMeaning }) {
@@ -33,8 +39,8 @@ export default function FilterBox({forOnChange,filterBy,handelClose, removeFilte
         <div>
     <Grid container display='flex' justify='flex-start'>
       <Grid item xs={12} md={4}>
-        <Box  id='Email' m={3} className='box'>
-           <Paper component="form" className={classes.root}>
+        <Box  id='Email' ml={3} m={2} className='box'>
+           <Paper component="form" className={classes.paper}>
               <IconButton className={classes.iconButton} aria-label="menu">
                 <MenuIcon />
               </IconButton>
@@ -60,10 +66,10 @@ export default function FilterBox({forOnChange,filterBy,handelClose, removeFilte
 
     <Grid item xs={12} md={4}>
 
-       <Box m={3} id='PhoneNumber' className='box' > 
+       <Box  ml={3} m={2} id='PhoneNumber' className='box' > 
 
 
-           <Paper component="form" className={classes.root}>
+           <Paper component="form" className={classes.paper}>
               <IconButton className={classes.iconButton} aria-label="menu">
                 <MenuIcon />
               </IconButton>
@@ -88,9 +94,9 @@ export default function FilterBox({forOnChange,filterBy,handelClose, removeFilte
       </Box>
     </Grid>
     <Grid item xs={12} md={4}>
-      <Box m={3} id='Status' className='box' >
+      <Box  ml={3} m={2} id='Status' className='box' >
 
-         <Paper component="form" className={classes.root}>
+         <Paper component="form" className={classes.paper}>
             <IconButton className={classes.iconButton} aria-label="menu">
               <MenuIcon />
             </IconButton>
@@ -122,7 +128,7 @@ export default function FilterBox({forOnChange,filterBy,handelClose, removeFilte
       isCompressed && (
 
         <Grid container display='flex' justify='flex-start'>
-          <Grid item xs={12} justify='center'>
+          <Grid item xs={12} className={classes.buttonRemove} >
               <Button variant='outlined' color='primary' size='small' onClick={removeFilter}>Remove filter</Button>
           </Grid>
         </Grid>
