@@ -69,7 +69,7 @@ export default function FilterBox({forOnChange,filterBy,handelClose, removeFilte
               </IconButton>
                 <InputBase
                     className={classes.input}
-                   name='PhoneNumber' 
+                    name='PhoneNumber' 
                     defaultValue={phoneMeaning} 
                     onChange={forOnChange} 
                     placeholder="Поиск по номеру телефона"

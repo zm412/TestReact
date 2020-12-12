@@ -36,21 +36,19 @@ export default function Home() {
   const [open, setOpen] = useState(false);
   let errorArr = [emailValidErr, phoneNumberValidErr, nameValidErr, statusValidErr];
   const tel = '+7 989 090 78 90'
-  console.log(searchStatus)
+  console.log(newItem)
 
-  const currentPos = (id, arr) => {
-    for( let i = 0; i < arr.length; i++ ){
-      if(id == arr[i].id) return i
-    }
-  }
-
-  const ifLocalStorIsEmpty = () => {
-
+  const cleanStates = () => {
+    setSearchEmail('');
+    setPhoneNumber('');
+    setName('');
+    setStatus('client');
   }
 
   const handleCloseDialogModal = () =>{
     setOpen(false);
   } 
+
 
   const handleClickOpenModal = () =>  setOpen(true); 
 
@@ -67,8 +65,9 @@ export default function Home() {
       checkKey = checkKey.join('');
       console.log(checkKey)
       let str = eval(checkKey);
+      console.log(str)
 
-      if(!nameExp.test(str) && !phoneExp.test(str) && !emailExp.test(str) && !statusExp.includes(str)){
+      if(!nameExp.test(str) && !phoneExp.test(str) && !emailExp.test(str) && !statusExp.includes(str) ){
         console.log(str)
         let validErr = 'set' + key + 'ValidErr' + '(' + true + ')';
         console.log(validErr)
@@ -108,13 +107,15 @@ export default function Home() {
   const filterBy = (e) => {
 
     e.preventDefault();
-    let id = e.target.closest('.boxSearch').id;
-    let key = id.split('');
+    let idBox = e.target.closest('.box').id;
+    let key = idBox.split('');
     key[0] = key[0].toLowerCase();
     key = key.join('');
+    console.log(key)
+    console.log(idBox)
     
     
-    let search = eval( id );
+    let search = eval( key );
     let store = JSON.parse(localStorage.getItem('users'));
     let newStore = store.filter(item => {
       console.log(item[key]);
@@ -145,12 +146,9 @@ export default function Home() {
   const removeFilter = () => {
     let store = JSON.parse(localStorage.getItem('users'));
     setUsers(store);
-    setSearchEmail('');
-    setSearchPhoneNumber('');
-    setSearchStatus('client');
     setIsCompressed(false);
+    cleanStates();
   }
-
 
    const saveUpdate = () => {
      if(errorArr.includes(false)){
@@ -175,7 +173,7 @@ export default function Home() {
  
 
   const saveNewItem = () => {
-    if(errorArr.includes(true)){
+    if(errorArr.includes(true) || name == '' || email == '' || phoneNumber == ''){
       setOpen(true)
     }else{
       setOpen(false)
@@ -262,7 +260,7 @@ export default function Home() {
       )
     }
 
-    <TableBox users={users} handleClose={handleCloseDialogModal} errArr={errorArr} forOnChange={onChangeValue} isUpd={isUpdating} newItm={newItem} updRow={updateRow} dltRow={deleteRow} addItem={addItem} saveItm={saveNewItem} saveUpd={saveUpdate} noUpd={cancelUpdate} />
+    <TableBox users={users} handleClose={handleCloseDialogModal} errArr={errorArr} forOnChange={onChangeValue} isUpd={isUpdating} newItm={newItem} updRow={updateRow} closeAdd={closeAddItem} dltRow={deleteRow} addItem={addItem} saveItm={saveNewItem} saveUpd={saveUpdate} noUpd={cancelUpdate} />
 
 
     

@@ -31,7 +31,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function TableBox({users, handleClose, isUpd, newItm,addItem, errArr, forOnChange, updRow, dltRow, saveUpd, noUpd , saveItm}) {
+export default function TableBox({users,closeAdd, handleClose, isUpd, newItm,addItem, errArr, forOnChange, updRow, dltRow, saveUpd, noUpd , saveItm}) {
   console.log(errArr)
 
  const classes = useStyles();
@@ -172,7 +172,7 @@ export default function TableBox({users, handleClose, isUpd, newItm,addItem, err
     
     {newItm && (
       
-    <AddItems forOnChange={forOnChange} errArr={errArr} open={newItm} handleClose={handleClose} saveItm={saveItm}/>
+    <AddItems forOnChange={forOnChange} errArr={errArr} open={newItm} handleClose={closeAdd} saveItm={saveItm}/>
          )}
     
     { !newItm && (
