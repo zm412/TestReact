@@ -38,7 +38,6 @@ export default function TableBox({users,closeAdd, handleClose, isUpd, newItm,add
 
    
   let tabBody = users.map((row, index) => (
-    index != isUpd ?
       <StyledTableRow key={index} className='row'>
         
         <StyledTableCell>{row.id}</StyledTableCell>
@@ -62,62 +61,7 @@ export default function TableBox({users,closeAdd, handleClose, isUpd, newItm,add
         </StyledTableCell>
 
       </StyledTableRow>
-    :
-      <StyledTableRow key={index} className='row'>
-        <StyledTableCell>{row.id}</StyledTableCell>
-
-        <StyledTableCell>
-          <TextField name='Email' 
-            helperText={errArr[0]?'Incorrect entry': ''} 
-            error={errArr[0]} 
-            defaultValue={row.email} 
-            onChange={forOnChange}
-          />
-        </StyledTableCell>
-
-        <StyledTableCell>
-          <TextField 
-            helperText={errArr[1]?'Incorrect entry': ''} 
-            error={errArr[1]}name='PhoneNumber'  
-            defaultValue={row.phoneNumber} 
-            onChange={forOnChange} 
-          />
-        </StyledTableCell>
-
-        <StyledTableCell>
-          <TextField name='Name' 
-            helperText={errArr[2]?'Incorrect entry': ''} 
-            error={errArr[2]} 
-            defaultValue={row.name} 
-            onChange={forOnChange}/>
-        </StyledTableCell>
-
-        <StyledTableCell>
-            <Select name='Status' name='Status' defaultValue='client' onChange={forOnChange} >
-              <MenuItem value='client'>Client</MenuItem>
-              <MenuItem value='partner'>Partner</MenuItem>
-              <MenuItem value='admin'>Admin</MenuItem>
-            </Select>
-        </StyledTableCell>
-
-        <StyledTableCell>{row.created}</StyledTableCell>
-        <StyledTableCell>{row.updated}</StyledTableCell>
-
-        <StyledTableCell>
-          <Button variant='outlined'  color='primary' size='small' onClick={saveUpd}>
-            Save
-          </Button>
-        </StyledTableCell>
-
-        <StyledTableCell>
-          <Button variant='outlined'  color='primary' size='small' onClick={noUpd}>
-            Cancel
-          </Button>
-        </StyledTableCell>
-
-        </StyledTableRow>
- 
-          ));
+              ));
 
   return (
     <div>
@@ -128,41 +72,23 @@ export default function TableBox({users,closeAdd, handleClose, isUpd, newItm,add
         <TableHead>
           <StyledTableRow>
 
-            <StyledTableCell component="th" scope="row" >
-              Id
-            </StyledTableCell>
+            <StyledTableCell component="th" scope="row" > Id </StyledTableCell>
 
-            <StyledTableCell component="th" scope="row" >
-              Email
-            </StyledTableCell>
+            <StyledTableCell component="th" scope="row" > Email </StyledTableCell>
 
-            <StyledTableCell component="th" scope="row" >
-              Phone number
-            </StyledTableCell>
+            <StyledTableCell component="th" scope="row" > Phone number </StyledTableCell>
 
-            <StyledTableCell component="th" scope="row" >
-              Name
-            </StyledTableCell>
+            <StyledTableCell component="th" scope="row" > Name </StyledTableCell>
 
-            <StyledTableCell component="th" scope="row" >
-              Status
-            </StyledTableCell>
+            <StyledTableCell component="th" scope="row" > Status </StyledTableCell>
 
-            <StyledTableCell component="th" scope="row" >
-              Created
-            </StyledTableCell>
+            <StyledTableCell component="th" scope="row" > Created </StyledTableCell>
 
-            <StyledTableCell component="th" scope="row" >
-              Updated
-            </StyledTableCell>
+            <StyledTableCell component="th" scope="row" > Updated </StyledTableCell>
 
-            <StyledTableCell component="th" scope="row" >
-              Redact
-            </StyledTableCell>
+            <StyledTableCell component="th" scope="row" > Redact </StyledTableCell>
 
-            <StyledTableCell component="th" scope="row" >
-              Delete
-            </StyledTableCell>
+            <StyledTableCell component="th" scope="row" > Delete </StyledTableCell>
 
           </StyledTableRow>
         </TableHead>
@@ -172,8 +98,8 @@ export default function TableBox({users,closeAdd, handleClose, isUpd, newItm,add
     
     {newItm && (
       
-    <AddItems forOnChange={forOnChange} errArr={errArr} open={newItm} handleClose={closeAdd} saveItm={saveItm}/>
-         )}
+      <AddItems forOnChange={forOnChange} errArr={errArr} open={newItm} handleClose={closeAdd} saveItm={saveItm}/>
+     )}
     
     { !newItm && (
       <Button variant='contained'  color='primary' size='small' onClick={addItem}>Add item</Button>

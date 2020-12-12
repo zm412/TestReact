@@ -5,6 +5,7 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 import FilterBox from './FilterBox';
 import TableBox from './TableBox';
 import AddItems from './AddItems';
+import UpdateItems from './UpdateItems';
 import DialogError from './DialogError';
 import Layout from './Header';
 
@@ -21,12 +22,14 @@ export default function Home() {
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [status, setStatus] = useState('client');
-  const [created, setCreated] = useState('');
-  const [updated, setUpdated] = useState('');
+  console.log(status)
+  const [created, setCreated] = useState();
+  const [updated, setUpdated] = useState();
   const [searchEmail, setSearchEmail] = useState('');
   const [searchPhoneNumber, setSearchPhoneNumber] = useState('');
   const [searchStatus, setSearchStatus] = useState('');
-  const [isUpdating, setIsUpdating] = useState(-1);
+  const [updatingRow, setUpdatingRow] = useState(-1);
+  const [isUpdating, setIsUpdating] = useState(false);
   const [changed, setChanged] = useState(-1);
   const [isCompressed, setIsCompressed] = useState(false);
   const [emailValidErr, setEmailValidErr] = useState(false);
@@ -44,6 +47,10 @@ export default function Home() {
     setName('');
     setStatus('client');
   }
+
+  useEffect(() => {
+    updatingRow > -1 ? setIsUpdating(true) : setIsUpdating(false);
+  }, [updatingRow]);
 
   const handleCloseDialogModal = () =>{
     setOpen(false);
@@ -64,6 +71,8 @@ export default function Home() {
       checkKey[0] = checkKey[0].toLowerCase();
       checkKey = checkKey.join('');
       console.log(checkKey)
+      console.log(status)
+      console.log(name)
       let str = eval(checkKey);
       console.log(str)
 
@@ -89,17 +98,13 @@ export default function Home() {
  
   const onChangeValue = (e) => {
     e.preventDefault();
-    let key;
-    if(e.target.id){
-      key = 'set' + e.target.id + '("' + e.target.value + '")';
-    }else{
-      key = 'set' + e.target.name + '("' + e.target.value + '")';
-    }
+    let key = 'set' + e.target.name + '("' + e.target.value + '")';
 
-    let keyValid =   e.target.name;
+    let keyValid = e.target.name;
     console.log(keyValid)
     checkFieldValidation(keyValid)
     
+    console.log(key)
     setUpdated(new Date());
     eval(key);
   }
@@ -139,8 +144,6 @@ export default function Home() {
       setPhoneNumber(store[pos].phoneNumber);
       setName(store[pos].name);
       setStatus(store[pos].status);
-      setCreated(store[pos].created);
-      setUpdated(store[pos].updated);
   }
 
   const removeFilter = () => {
@@ -151,14 +154,15 @@ export default function Home() {
   }
 
    const saveUpdate = () => {
-     if(errorArr.includes(false)){
+     if(errorArr.includes(true)){
        setOpen(true);
      }else{
        setOpen(false);
       let store = JSON.parse(localStorage.getItem('users'));
-      store[isUpdating] = {id: id, email: email, name: name, phoneNumber: phoneNumber, created: created, updated: updated}
+      store[updatingRow] = {id: id, email: email, name: name, phoneNumber: phoneNumber,status: status, created: created, updated: updated}
       localStorage.setItem('users', JSON.stringify(store));
-      setIsUpdating(-1);
+      setUpdatingRow(-1);
+      setIsUpdating(false);
       setChangeUser(true);
       setUpdated(new Date()); 
      }
@@ -177,15 +181,16 @@ export default function Home() {
       setOpen(true)
     }else{
       setOpen(false)
+      setCreated(new Date()) ;
+      setUpdated(new Date()); 
+
       let store = JSON.parse(localStorage.getItem('users'));
       let newId = store[store.length - 1].id + 1;
-      store.push({id: newId,email: email, phoneNumber: phoneNumber, name: name, status: status, created: created, updated: updated});
+      store.push({id: newId,email: email,  name: name,phoneNumber: phoneNumber, status: status, created: created, updated: updated});
       console.log(store)
       localStorage.setItem('users', JSON.stringify(store));
       setChangeUser(true)
       setNewItem(false)
-      setCreated(new Date()) ;
-      setUpdated(new Date()); 
       setStatus('client')
     }
    
@@ -213,7 +218,8 @@ export default function Home() {
   }
 
    const cancelUpdate = () => {
-    setIsUpdating(-1);
+    setUpdatingRow(-1);
+    setIsUpdating(false);
     setEmailValidErr(false) ;
     setPhoneNumberValidErr(false) ;
     setNameValidErr(false) ;
@@ -225,16 +231,11 @@ export default function Home() {
     e.preventDefault();
     let parent = e.target.closest('.row');
     let id = parent.firstElementChild.innerHTML;
-    console.log(parent.firstElementChild.innerHTML)
     
     let store = JSON.parse(localStorage.getItem('users'));
     let pos;
     for(let i = 0; i < store.length; i++){
-        console.log(store[i].id)
-        console.log(id)
       if(store[i].id == id){
-        console.log(i)
-        console.log(id)
         pos = i;
       }
     }
@@ -242,7 +243,7 @@ export default function Home() {
     console.log(pos)
        
     rememberState(pos)
-    setIsUpdating(pos);
+    setUpdatingRow(pos);
     setChangeUser(true);
   }
   console.log(open)
@@ -252,16 +253,19 @@ export default function Home() {
 
     <FilterBox forOnChange={onChangeValue} filterBy={filterBy} isCompressed={isCompressed} removeFilter={removeFilter} emailMeaning={searchEmail} phoneMeaning={searchPhoneNumber} />
 
-    {
-      open && (
+    { open && (
         
         <DialogError open={open} handleClose={handleCloseDialogModal} closeRedact={cancelUpdate} />
         
+      ) }
+
+    <TableBox users={users} handleClose={handleCloseDialogModal} errArr={errorArr} forOnChange={onChangeValue} isUpd={updatingRow} newItm={newItem} updRow={updateRow} closeAdd={closeAddItem} dltRow={deleteRow} addItem={addItem} saveItm={saveNewItem} saveUpd={saveUpdate} noUpd={cancelUpdate} />
+
+    {
+      isUpdating && (
+        <UpdateItems indexRow={updatingRow} forOnChange={onChangeValue} errArr={errorArr} open={isUpdating} handleClose={cancelUpdate}  saveUpd={saveUpdate}/>
       )
     }
-
-    <TableBox users={users} handleClose={handleCloseDialogModal} errArr={errorArr} forOnChange={onChangeValue} isUpd={isUpdating} newItm={newItem} updRow={updateRow} closeAdd={closeAddItem} dltRow={deleteRow} addItem={addItem} saveItm={saveNewItem} saveUpd={saveUpdate} noUpd={cancelUpdate} />
-
 
     
     </div>
