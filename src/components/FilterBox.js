@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react';
 import {TextField,Divider,IconButton, InputBase, Box, Select, MenuItem, Container,Paper,Table, TableContainer, TableHead, TableRow, TableBody, TableCell, Button, Grid, Typography, Breadcrumbs} from  '@material-ui/core';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
+import Icon from '@material-ui/icons/Search';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -26,21 +26,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function FilterBox({forOnChange,filterBy, removeFilter, isCompressed, emailMeaning, phoneMeaning }) {
+export default function FilterBox({forOnChange,filterBy,handelClose, removeFilter, isCompressed, emailMeaning, phoneMeaning }) {
 
   const classes = useStyles();
   return (
         <div>
     <Grid container display='flex' justify='flex-start'>
       <Grid item xs={12} md={4}>
-        <Box  id='Email' m={3} className='boxSearch'>
+        <Box  id='Email' m={3} className='box'>
            <Paper component="form" className={classes.root}>
               <IconButton className={classes.iconButton} aria-label="menu">
                 <MenuIcon />
               </IconButton>
                 <InputBase
                   className={classes.input}
-                  id='SearchEmail'  
+                 name='Email'  
                   defaultValue={emailMeaning} 
                   placeholder="Поиск по email"
                   onChange={forOnChange}
@@ -49,7 +49,7 @@ export default function FilterBox({forOnChange,filterBy, removeFilter, isCompres
                 <Button 
                     onClick={filterBy}  
                     color='primary' 
-                    startIcon={<SearchIcon/>}
+                    startIcon={<Icon/>}
                 > </Button>
       <Divider className={classes.divider} orientation="vertical" />
       <Divider className={classes.divider} orientation="vertical" />
@@ -60,7 +60,7 @@ export default function FilterBox({forOnChange,filterBy, removeFilter, isCompres
 
     <Grid item xs={12} md={4}>
 
-       <Box m={3} id='PhoneNumber' className='boxSearch' > 
+       <Box m={3} id='PhoneNumber' className='box' > 
 
 
            <Paper component="form" className={classes.root}>
@@ -69,7 +69,7 @@ export default function FilterBox({forOnChange,filterBy, removeFilter, isCompres
               </IconButton>
                 <InputBase
                     className={classes.input}
-                    id='SearchPhoneNumber' 
+                   name='PhoneNumber' 
                     defaultValue={phoneMeaning} 
                     onChange={forOnChange} 
                     placeholder="Поиск по номеру телефона"
@@ -78,7 +78,7 @@ export default function FilterBox({forOnChange,filterBy, removeFilter, isCompres
                 <Button 
                     onClick={filterBy}  
                     color='primary' 
-                    startIcon={<SearchIcon/>}
+                    startIcon={<Icon/>}
                 >
               </Button>
                 <Divider className={classes.divider} orientation="vertical" />
@@ -88,13 +88,13 @@ export default function FilterBox({forOnChange,filterBy, removeFilter, isCompres
       </Box>
     </Grid>
     <Grid item xs={12} md={4}>
-      <Box m={3} id='Status' className='boxSearch' >
+      <Box m={3} id='Status' className='box' >
 
          <Paper component="form" className={classes.root}>
             <IconButton className={classes.iconButton} aria-label="menu">
               <MenuIcon />
             </IconButton>
-                <Select value='0' className={classes.input} name='SearchStatus' onChange={forOnChange} >
+                <Select value='0' className={classes.input} name='Status' onChange={forOnChange} >
                   <MenuItem value='0' disabled>Поиск по статусу</MenuItem>
                   <MenuItem value='client'>Client</MenuItem>
                   <MenuItem value='partner'>Partner</MenuItem>
@@ -104,7 +104,7 @@ export default function FilterBox({forOnChange,filterBy, removeFilter, isCompres
                <Button 
                   onClick={filterBy}  
                   color='primary' 
-                  startIcon={<SearchIcon/>}
+                  startIcon={<Icon/>}
                 >
                 </Button>
 

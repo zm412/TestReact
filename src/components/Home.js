@@ -4,6 +4,7 @@ import {TextField,Select, MenuItem, Container,Paper,Table, TableContainer, Table
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import FilterBox from './FilterBox';
 import TableBox from './TableBox';
+import AddItems from './AddItems';
 import DialogError from './DialogError';
 import Layout from './Header';
 
@@ -61,10 +62,13 @@ export default function Home() {
     let checkKey = key.split('');
     checkKey[0] = checkKey[0].toLowerCase();
     checkKey = checkKey.join('');
-    let str = eval(checkKey).value; 
+    console.log(checkKey)
+    let str = eval(checkKey);
 
     if(!nameExp.test(str) && !phoneExp.test(str) && !emailExp.test(str)){
+      console.log(str)
       let validErr = 'set' + key + 'ValidErr' + '(' + true + ')';
+      console.log(validErr)
       eval(validErr);
     }else{
       let validErr = 'set' + key + 'ValidErr' + '(' + false + ')';
@@ -74,12 +78,7 @@ export default function Home() {
 
     const onChangeValueForFilter = (e) => {
     e.preventDefault();
-    let key;
-    if(e.target.id){
-      key = 'set' + e.target.id + '("' + e.target.value + '")';
-    }else{
-      key = 'set' + e.target.name + '("' + e.target.value + '")';
-    }
+    let key = 'set' + e.target.name + '("' + e.target.value + '")';
       console.log(key)
     setUpdated(new Date());
     eval(key);
@@ -110,8 +109,8 @@ export default function Home() {
     key[0] = key[0].toLowerCase();
     key = key.join('');
     
-    let str = 'search' + id;
-    let search = eval( str );
+    
+    let search = eval( id );
     let store = JSON.parse(localStorage.getItem('users'));
     let newStore = store.filter(item => {
       console.log(item[key]);
@@ -149,20 +148,41 @@ export default function Home() {
   }
 
 
+   const saveUpdate = () => {
+     if(errorArr.includes(false)){
+       setOpen(true);
+     }else{
+       setOpen(false);
+      let store = JSON.parse(localStorage.getItem('users'));
+      store[isUpdating] = {id: id, email: email, name: name, phoneNumber: phoneNumber, created: created, updated: updated}
+      localStorage.setItem('users', JSON.stringify(store));
+      setIsUpdating(-1);
+      setChangeUser(true);
+      setUpdated(new Date()); 
+     }
+  }
+
+
+  const addItem = () =>{
+    removeFilter();
+    cancelUpdate();
+    setNewItem(true);
+  } 
+ 
 
   const saveNewItem = () => {
     if(errorArr.includes(true)){
       setOpen(true)
     }else{
+      setOpen(false)
       let store = JSON.parse(localStorage.getItem('users'));
       let newId = store[store.length - 1].id + 1;
       store.push({id: newId,email: email, phoneNumber: phoneNumber, name: name, status: status, created: created, updated: updated});
       localStorage.setItem('users', JSON.stringify(store));
       setChangeUser(true)
       setNewItem(false)
-      setOpen(false)
-    setCreated(new Date()) ;
-    setUpdated(new Date()); 
+      setCreated(new Date()) ;
+      setUpdated(new Date()); 
     }
    
   }
@@ -176,13 +196,7 @@ export default function Home() {
 
    
   
-
-  const addItem = () =>{
-    removeFilter();
-    cancelUpdate();
-    setNewItem(true);
-  } 
-  const closeAddItem = () => setNewItem(false);
+ const closeAddItem = () => setNewItem(false);
 
   const deleteRow = (e) => {
     e.preventDefault();
@@ -227,26 +241,12 @@ export default function Home() {
     setIsUpdating(pos);
     setChangeUser(true);
   }
-
-   const saveUpdate = () => {
-     if(errorArr.includes(false)){
-       setOpen(true);
-     }else{
-       setOpen(false);
-      let store = JSON.parse(localStorage.getItem('users'));
-      store[isUpdating] = {id: id, email: email, name: name, phoneNumber: phoneNumber, created: created, updated: updated}
-      localStorage.setItem('users', JSON.stringify(store));
-      setIsUpdating(-1);
-      setChangeUser(true);
-     }
-  }
-
   console.log(open)
   
   return (
     <div>
 
-    <FilterBox forOnChange={onChangeValueForFilter} filterBy={filterBy} isCompressed={isCompressed} removeFilter={removeFilter} emailMeaning={searchEmail} phoneMeaning={searchPhoneNumber} />
+    <FilterBox forOnChange={onChangeValue} filterBy={filterBy} isCompressed={isCompressed} removeFilter={removeFilter} emailMeaning={searchEmail} phoneMeaning={searchPhoneNumber} />
 
     {
       open && (
@@ -256,21 +256,8 @@ export default function Home() {
       )
     }
 
-    <TableBox users={users} errArr={errorArr} forOnChange={onChangeValue} isUpd={isUpdating} newItm={newItem} updRow={updateRow} dltRow={deleteRow} saveUpd={saveUpdate} noUpd={cancelUpdate} />
+    <TableBox users={users} handleClose={handleCloseDialogModal} errArr={errorArr} forOnChange={onChangeValue} isUpd={isUpdating} newItm={newItem} updRow={updateRow} dltRow={deleteRow} addItem={addItem} saveItm={saveNewItem} saveUpd={saveUpdate} noUpd={cancelUpdate} />
 
-
-    { !newItem && (
-      <Button variant='contained'  color='primary' size='small' onClick={addItem}>Add item</Button>
-    ) }
-
-    {
-      newItem && (
-        <div>
-          <Button variant='contained'  color='primary' size='small' onClick={saveNewItem}>Save new item</Button>
-          <Button variant='contained'  color='primary' size='small' onClick={closeAddItem}>Cancel</Button>
-        </div>
-      )
-    }
 
     
     </div>

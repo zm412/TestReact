@@ -3,6 +3,7 @@ import React from 'react';
 import {useState, useEffect} from 'react';
 import {TextField,Select, MenuItem, Container,Paper,Table, TableContainer, TableHead, TableRow, TableBody, TableCell, Button, Grid, Typography, Breadcrumbs} from  '@material-ui/core';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
+import AddItems from './AddItems';
 
 
 const StyledTableCell = withStyles((theme) => ({
@@ -12,7 +13,6 @@ const StyledTableCell = withStyles((theme) => ({
   },
   body: {
     fontSize: 14,
-    width: 150
   },
 }))(TableCell);
 
@@ -31,7 +31,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function TableBox({users, isUpd, newItm, errArr, forOnChange, updRow, dltRow, saveUpd, noUpd }) {
+export default function TableBox({users, handleClose, isUpd, newItm,addItem, errArr, forOnChange, updRow, dltRow, saveUpd, noUpd , saveItm}) {
   console.log(errArr)
 
  const classes = useStyles();
@@ -67,7 +67,7 @@ export default function TableBox({users, isUpd, newItm, errArr, forOnChange, upd
         <StyledTableCell>{row.id}</StyledTableCell>
 
         <StyledTableCell>
-          <TextField id='Email' 
+          <TextField name='Email' 
             helperText={errArr[0]?'Incorrect entry': ''} 
             error={errArr[0]} 
             defaultValue={row.email} 
@@ -78,14 +78,14 @@ export default function TableBox({users, isUpd, newItm, errArr, forOnChange, upd
         <StyledTableCell>
           <TextField 
             helperText={errArr[1]?'Incorrect entry': ''} 
-            error={errArr[1]} id='PhoneNumber'  
+            error={errArr[1]}name='PhoneNumber'  
             defaultValue={row.phoneNumber} 
             onChange={forOnChange} 
           />
         </StyledTableCell>
 
         <StyledTableCell>
-          <TextField id='Name' 
+          <TextField name='Name' 
             helperText={errArr[2]?'Incorrect entry': ''} 
             error={errArr[2]} 
             defaultValue={row.name} 
@@ -93,7 +93,7 @@ export default function TableBox({users, isUpd, newItm, errArr, forOnChange, upd
         </StyledTableCell>
 
         <StyledTableCell>
-            <Select id='Status' name='Status' defaultValue='client' onChange={forOnChange} >
+            <Select name='Status' name='Status' defaultValue='client' onChange={forOnChange} >
               <MenuItem value='client'>Client</MenuItem>
               <MenuItem value='partner'>Partner</MenuItem>
               <MenuItem value='admin'>Admin</MenuItem>
@@ -171,52 +171,15 @@ export default function TableBox({users, isUpd, newItm, errArr, forOnChange, upd
          {tabBody}
     
     {newItm && (
-      <StyledTableRow className='row'>
-        <StyledTableCell></StyledTableCell>
-
-        <StyledTableCell>
-          <TextField 
-            helperText={errArr[0]?'Incorrect entry': ''} 
-            error={errArr[0]} 
-            id='Email' 
-            onChange={forOnChange}
-          />
-        </StyledTableCell>
       
-        <StyledTableCell>
-          <TextField 
-            helperText={errArr[1]?'Incorrect entry': ''} 
-            error={errArr[1]} 
-            id='PhoneNumber' 
-            onChange={forOnChange} 
-          />
-        </StyledTableCell>
-
-        <StyledTableCell>
-          <TextField 
-            id='Name' 
-            error={errArr[2]} 
-            helperText={errArr[2] ?'Incorrect entry': ''} 
-            onChange={forOnChange}
-          />
-        </StyledTableCell>
-
-        <StyledTableCell>
-          <Select defaultValue='client' name='Status' onChange={forOnChange} >
-            <MenuItem value='client'>Client</MenuItem>
-            <MenuItem value='partner'>Partner</MenuItem>
-            <MenuItem value='admin'>Admin</MenuItem>
-          </Select>
-        </StyledTableCell>
-
-        <StyledTableCell><TextField disabled /></StyledTableCell>
-        <StyledTableCell><TextField disabled /></StyledTableCell>
-        <StyledTableCell></StyledTableCell>
-        <StyledTableCell></StyledTableCell>
-      
-      </StyledTableRow>
-          )}
+    <AddItems forOnChange={forOnChange} errArr={errArr} open={newItm} handleClose={handleClose} saveItm={saveItm}/>
+         )}
     
+    { !newItm && (
+      <Button variant='contained'  color='primary' size='small' onClick={addItem}>Add item</Button>
+    ) }
+
+
 
 
         </TableBody>
