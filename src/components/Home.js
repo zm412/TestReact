@@ -30,10 +30,11 @@ export default function Home() {
   const [changed, setChanged] = useState(-1);
   const [isCompressed, setIsCompressed] = useState(false);
   const [emailValidErr, setEmailValidErr] = useState(false);
+  const [statusValidErr, setStatusValidErr] = useState(false);
   const [phoneNumberValidErr, setPhoneNumberValidErr] = useState(false);
   const [nameValidErr, setNameValidErr] = useState(false);
   const [open, setOpen] = useState(false);
-  let errorArr = [emailValidErr, phoneNumberValidErr, nameValidErr];
+  let errorArr = [emailValidErr, phoneNumberValidErr, nameValidErr, statusValidErr];
   const tel = '+7 989 090 78 90'
   console.log(searchStatus)
 
@@ -54,26 +55,28 @@ export default function Home() {
   const handleClickOpenModal = () =>  setOpen(true); 
 
   const checkFieldValidation = (key) => {
-    let nameExp = /^[A-ЯЁA-Z][а-яёa-z]+\s[A-ЯЁA-Z][а-яёa-z]/;
-    let phoneExp = /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/;
-    let emailExp = /^((([0-9A-Za-z]{1}[-0-9A-z\.]{1,}[0-9A-Za-z]{1})|([0-9А-Яа-я]{1}[-0-9А-я\.]{1,}[0-9А-Яа-я]{1}))@([-A-Za-z]{1,}\.){1,2}[-A-Za-z]{2,})$/u;
+
+      let nameExp = /^[A-ЯЁA-Z][а-яёa-z]+\s[A-ЯЁA-Z][а-яёa-z]/;
+      let phoneExp = /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/;
+      let emailExp = /^((([0-9A-Za-z]{1}[-0-9A-z\.]{1,}[0-9A-Za-z]{1})|([0-9А-Яа-я]{1}[-0-9А-я\.]{1,}[0-9А-Яа-я]{1}))@([-A-Za-z]{1,}\.){1,2}[-A-Za-z]{2,})$/u;
+      let statusExp = ['client', 'partner', 'admin'];
 
 
-    let checkKey = key.split('');
-    checkKey[0] = checkKey[0].toLowerCase();
-    checkKey = checkKey.join('');
-    console.log(checkKey)
-    let str = eval(checkKey);
+      let checkKey = key.split('');
+      checkKey[0] = checkKey[0].toLowerCase();
+      checkKey = checkKey.join('');
+      console.log(checkKey)
+      let str = eval(checkKey);
 
-    if(!nameExp.test(str) && !phoneExp.test(str) && !emailExp.test(str)){
-      console.log(str)
-      let validErr = 'set' + key + 'ValidErr' + '(' + true + ')';
-      console.log(validErr)
-      eval(validErr);
-    }else{
-      let validErr = 'set' + key + 'ValidErr' + '(' + false + ')';
-      eval(validErr);
-    }
+      if(!nameExp.test(str) && !phoneExp.test(str) && !emailExp.test(str) && !statusExp.includes(str)){
+        console.log(str)
+        let validErr = 'set' + key + 'ValidErr' + '(' + true + ')';
+        console.log(validErr)
+        eval(validErr);
+      }else{
+        let validErr = 'set' + key + 'ValidErr' + '(' + false + ')';
+        eval(validErr);
+      }
   }
 
     const onChangeValueForFilter = (e) => {
@@ -94,7 +97,8 @@ export default function Home() {
       key = 'set' + e.target.name + '("' + e.target.value + '")';
     }
 
-    let keyValid =  e.target.id ? e.target.id : e.target.name;
+    let keyValid =   e.target.name;
+    console.log(keyValid)
     checkFieldValidation(keyValid)
     
     setUpdated(new Date());
@@ -178,11 +182,13 @@ export default function Home() {
       let store = JSON.parse(localStorage.getItem('users'));
       let newId = store[store.length - 1].id + 1;
       store.push({id: newId,email: email, phoneNumber: phoneNumber, name: name, status: status, created: created, updated: updated});
+      console.log(store)
       localStorage.setItem('users', JSON.stringify(store));
       setChangeUser(true)
       setNewItem(false)
       setCreated(new Date()) ;
       setUpdated(new Date()); 
+      setStatus('client')
     }
    
   }

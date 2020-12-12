@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 
 }))
 
-export default function AddItems({forOnChange, errArr,open, handleClose, closeRedact,saveItem }) {
+export default function AddItems({forOnChange, errArr,open, handleClose, closeRedact,saveItm }) {
   console.log(errArr)
 
  const classes = useStyles();
@@ -87,7 +87,7 @@ export default function AddItems({forOnChange, errArr,open, handleClose, closeRe
     </Grid>
       <Grid item xs={12}> 
             <Box m={3}>
-              <Select defaultValue='client' name='searchStatus' onChange={forOnChange} >
+              <Select defaultValue='client' name='Status' onChange={forOnChange} >
                 <MenuItem value='client'>Client</MenuItem>
                 <MenuItem value='partner'>Partner</MenuItem>
                 <MenuItem value='admin'>Admin</MenuItem>
@@ -96,7 +96,7 @@ export default function AddItems({forOnChange, errArr,open, handleClose, closeRe
     </Grid>
       <Grid item xs={12}> 
         <Box m={3}>
-          <Button variant='contained'  color='primary' size='small' onClick={saveItem}>Save new item</Button>
+          <Button variant='contained'  color='primary' size='small' onClick={saveItm}>Save new item</Button>
           <Button variant='contained'  color='primary' size='small' onClick={handleClose}>Cancel</Button>
     </Box>
     </Grid>
