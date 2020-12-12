@@ -127,6 +127,7 @@ export default function Home() {
 
 
    const rememberState = (pos) => {
+     console.log(pos)
     let store = JSON.parse(localStorage.getItem('users'));
 
       setId(store[pos].id);
@@ -205,7 +206,23 @@ export default function Home() {
     setChangeUser(true);
     e.preventDefault();
     let parent = e.target.closest('.row');
-    let pos = parent.firstElementChild.innerHTML -1;
+    let id = parent.firstElementChild.innerHTML;
+    console.log(parent.firstElementChild.innerHTML)
+    
+    let store = JSON.parse(localStorage.getItem('users'));
+    let pos;
+    for(let i = 0; i < store.length; i++){
+        console.log(store[i].id)
+        console.log(id)
+      if(store[i].id == id){
+        console.log(i)
+        console.log(id)
+        pos = i;
+      }
+    }
+
+    console.log(pos)
+       
     rememberState(pos)
     setIsUpdating(pos);
     setChangeUser(true);
