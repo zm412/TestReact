@@ -40,6 +40,14 @@ export default function Header(){
     <Grid container alignItems="flex-start" className ={classes.root} justify="flex-end" direction="row">
         <Toolbar>
       <Box mr={2} align-content='flex-end' className={classes.icon}>
+       <Link to='/schedule'>
+        <a style={{textDecoration:'none', color: 'white'}}>
+          Schedule 
+        </a>
+      </Link>
+      </Box>
+ 
+      <Box mr={2} align-content='flex-end' className={classes.icon}>
        <Link to='/roster'>
         <a style={{textDecoration:'none', color: 'white'}}>
            Roster

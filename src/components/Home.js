@@ -1,6 +1,5 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
-import {TextField,Select, MenuItem, Container,Paper,Table, TableContainer, TableHead, TableRow, TableBody, TableCell, Button, Grid, Typography, Breadcrumbs} from  '@material-ui/core';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import FilterBox from './FilterBox';
 import TableBox from './TableBox';
@@ -15,34 +14,32 @@ export default function Home() {
 //  localStorage.setItem('users', JSON.stringify([ {id: 1, email: 'email', phoneNumber: '+7 8235352575', name: 'Firstname Lastname', status: 'client', created: new Date(), updated: new Date()} ]))
 
   const [users, setUsers] = useState(JSON.parse(localStorage.getItem('users')));
-  const [changeUser, setChangeUser] = useState(false);
-  const [newItem, setNewItem] = useState(false);
+
   const [id, setId] = useState('');
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [status, setStatus] = useState('client');
-  console.log(status)
   const [created, setCreated] = useState();
   const [updated, setUpdated] = useState();
-  const [searchEmail, setSearchEmail] = useState('');
-  const [searchPhoneNumber, setSearchPhoneNumber] = useState('');
-  const [searchStatus, setSearchStatus] = useState('');
+
+
+  const [newItem, setNewItem] = useState(false);
+  const [changeUser, setChangeUser] = useState(false);
   const [updatingRow, setUpdatingRow] = useState(-1);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [changed, setChanged] = useState(-1);
   const [isCompressed, setIsCompressed] = useState(false);
+  const [open, setOpen] = useState(false);
+
   const [emailValidErr, setEmailValidErr] = useState(false);
   const [statusValidErr, setStatusValidErr] = useState(false);
   const [phoneNumberValidErr, setPhoneNumberValidErr] = useState(false);
   const [nameValidErr, setNameValidErr] = useState(false);
-  const [open, setOpen] = useState(false);
+
   let errorArr = [emailValidErr, phoneNumberValidErr, nameValidErr, statusValidErr];
-  const tel = '+7 989 090 78 90'
-  console.log(newItem)
 
   const cleanStates = () => {
-    setSearchEmail('');
+    setEmail('');
     setPhoneNumber('');
     setName('');
     setStatus('client');
@@ -70,16 +67,10 @@ export default function Home() {
       let checkKey = key.split('');
       checkKey[0] = checkKey[0].toLowerCase();
       checkKey = checkKey.join('');
-      console.log(checkKey)
-      console.log(status)
-      console.log(name)
       let str = eval(checkKey);
-      console.log(str)
 
       if(!nameExp.test(str) && !phoneExp.test(str) && !emailExp.test(str) && !statusExp.includes(str) ){
-        console.log(str)
         let validErr = 'set' + key + 'ValidErr' + '(' + true + ')';
-        console.log(validErr)
         eval(validErr);
       }else{
         let validErr = 'set' + key + 'ValidErr' + '(' + false + ')';
@@ -90,7 +81,6 @@ export default function Home() {
     const onChangeValueForFilter = (e) => {
     e.preventDefault();
     let key = 'set' + e.target.name + '("' + e.target.value + '")';
-      console.log(key)
     eval(key);
   }
 
@@ -100,10 +90,8 @@ export default function Home() {
     let key = 'set' + e.target.name + '("' + e.target.value + '")';
 
     let keyValid = e.target.name;
-    console.log(keyValid)
     checkFieldValidation(keyValid)
     
-    console.log(key)
     setUpdated(new Date());
     eval(key);
   }
@@ -115,18 +103,13 @@ export default function Home() {
     let key = idBox.split('');
     key[0] = key[0].toLowerCase();
     key = key.join('');
-    console.log(key)
-    console.log(idBox)
     
     
     let search = eval( key );
     let store = JSON.parse(localStorage.getItem('users'));
     let newStore = store.filter(item => {
-      console.log(item[key]);
-      console.log(search);
         return item[key] == search
     });
-    console.log(newStore)
     setUsers(newStore);
     setNewItem(false);
     setIsCompressed(true);
@@ -135,7 +118,6 @@ export default function Home() {
 
 
    const rememberState = (pos) => {
-     console.log(pos)
     let store = JSON.parse(localStorage.getItem('users'));
 
       setId(store[pos].id);
@@ -187,7 +169,6 @@ export default function Home() {
       let store = JSON.parse(localStorage.getItem('users'));
       let newId = store[store.length - 1].id + 1;
       store.push({id: newId,email: email,  name: name,phoneNumber: phoneNumber, status: status, created: new Date(), updated: new Date()});
-      console.log(store)
       localStorage.setItem('users', JSON.stringify(store));
       setChangeUser(true)
       setNewItem(false)
@@ -240,13 +221,11 @@ export default function Home() {
       }
     }
 
-    console.log(pos)
        
     rememberState(pos)
     setUpdatingRow(pos);
     setChangeUser(true);
   }
-  console.log(open)
   
   return (
     <div>
