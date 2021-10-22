@@ -9,8 +9,12 @@ import Icon from '@material-ui/icons/Search';
 const useStyles = makeStyles((theme) => ({
   root: {
   },
+  block: {
+    width: '100%',
+  },
   paper:{
     padding: '2px 4px',
+    margin: '15px 0',
     display: 'flex',
     alignItems: 'center',
     width: 300,
@@ -32,57 +36,40 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function FilterBox({forOnChange,filterBy,handelClose, removeFilter, isCompressed, emailMeaning, phoneMeaning }) {
 
+const SearchField = (props) => {
+  
   const classes = useStyles();
-  return (
-        <div>
-    <Grid container display='flex' justify='flex-start'>
-      <Grid item xs={12} md={4}>
-        <Box  id='Email' ml={3} m={2} className='box'>
+
+  return(
+   <Grid item xs={12} className='connect' data-connect={props.name}>
            <Paper component="form" className={classes.paper}>
               <IconButton className={classes.iconButton} aria-label="menu">
                 <MenuIcon />
               </IconButton>
-                <InputBase
-                  className={classes.input}
-                 name='Email'  
-                  defaultValue={emailMeaning} 
-                  placeholder="Поиск по email"
-                  onChange={forOnChange}
-                  inputProps={{ 'aria-label': 'search google maps' }}
-                />
-                <Button 
-                    onClick={filterBy}  
-                    color='primary' 
-                    startIcon={<Icon/>}
-                > </Button>
-      <Divider className={classes.divider} orientation="vertical" />
-      <Divider className={classes.divider} orientation="vertical" />
-    </Paper>
-
-       </Box>
-    </Grid>
-
-    <Grid item xs={12} md={4}>
-
-       <Box  ml={3} m={2} id='PhoneNumber' className='box' > 
-
-
-           <Paper component="form" className={classes.paper}>
-              <IconButton className={classes.iconButton} aria-label="menu">
-                <MenuIcon />
-              </IconButton>
-                <InputBase
+    
+    {
+      props.name == 'Status' ?
+                 <Select value='0' className={classes.input} name='Status' onChange={props.forOnChange} >
+                  <MenuItem value='0' disabled>Поиск по статусу</MenuItem>
+                  <MenuItem value='client'>Client</MenuItem>
+                  <MenuItem value='partner'>Partner</MenuItem>
+                  <MenuItem value='admin'>Admin</MenuItem>
+                </Select>   
+        :
+          <InputBase
                     className={classes.input}
-                    name='PhoneNumber' 
-                    defaultValue={phoneMeaning} 
-                    onChange={forOnChange} 
-                    placeholder="Поиск по номеру телефона"
+                    name={props.name} 
+                    defaultValue={props.meaning} 
+                    onChange={props.forOnChange} 
+                    placeholder={props.title}
                     inputProps={{ 'aria-label': 'search google maps' }}
                 />
-                <Button 
-                    onClick={filterBy}  
+
+    }
+               <Button 
+                    
+                    onClick={props.filterBy}  
                     color='primary' 
                     startIcon={<Icon/>}
                 >
@@ -90,46 +77,37 @@ export default function FilterBox({forOnChange,filterBy,handelClose, removeFilte
                 <Divider className={classes.divider} orientation="vertical" />
                 <Divider className={classes.divider} orientation="vertical" />
           </Paper>
-         
-      </Box>
     </Grid>
-    <Grid item xs={12} md={4}>
-      <Box  ml={3} m={2} id='Status' className='box' >
-
-         <Paper component="form" className={classes.paper}>
-            <IconButton className={classes.iconButton} aria-label="menu">
-              <MenuIcon />
-            </IconButton>
-                <Select value='0' className={classes.input} name='Status' onChange={forOnChange} >
-                  <MenuItem value='0' disabled>Поиск по статусу</MenuItem>
-                  <MenuItem value='client'>Client</MenuItem>
-                  <MenuItem value='partner'>Partner</MenuItem>
-                  <MenuItem value='admin'>Admin</MenuItem>
-                </Select>   
-
-               <Button 
-                  onClick={filterBy}  
-                  color='primary' 
-                  startIcon={<Icon/>}
-                >
-                </Button>
-
-          <Divider className={classes.divider} orientation="vertical" />
-          <Divider className={classes.divider} orientation="vertical" />
-        </Paper>
+  
+  )
+}
 
 
-        </Box>
+export default function FilterBox(props) {
+
+  let searchFieldsInfo = [ {name:'Email', title: 'Поиск по email'}, { name: "PhoneNumber", title: "Поиск по номеру телефона"}, {name: "Status", title: ''} ]
+
+  const classes = useStyles();
+
+  return (
+        <div className={classes.block}>
+    <Grid container spacing={2} sx={{ flexGrow: 1 }} >
+        <Grid item xs={12}>
+            <Grid container justifyContent="center" spacing={1}>
+        {
+        searchFieldsInfo.map((n, i) => <div key={i}><SearchField name={n.name} title={n.title} {...props} /> </div>)
+        }
+            </Grid>
+
       </Grid>
     </Grid>
-
     
     {
-      isCompressed && (
+      props.isCompressed && (
 
         <Grid container display='flex' justify='flex-start'>
           <Grid item xs={12} className={classes.buttonRemove} >
-              <Button variant='outlined' color='primary' size='small' onClick={removeFilter}>Remove filter</Button>
+              <Button variant='outlined' color='primary' size='small' onClick={props.removeFilter}>Remove filter</Button>
           </Grid>
         </Grid>
 

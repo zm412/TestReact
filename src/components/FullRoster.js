@@ -1,21 +1,23 @@
 import React from 'react'
-import PlayerAPI from '../api'
+import UserAPI from '../api'
 import { Link } from 'react-router-dom'
 
 // The FullRoster iterates over all of the players and creates
 // a link to their profile page.
-const FullRoster = () => (
+const FullRoster = () => { 
+  console.log(UserAPI.all(), 'all')
+  return(
   <div>
-    <ul>
-      {
-        PlayerAPI.all().map(p => (
-          <li key={p.number}>
-            <Link to={`/roster/${p.number}`}>{p.name}</Link>
-          </li>
-        ))
-      }
-    </ul>
+  <ul>
+  {
+    UserAPI.all().map(p => (
+      <li key={p.id}>
+      <Link to={`/roster/${p.id}`}>{p.name}</Link>
+      </li>
+    ))
+  }
+  </ul>
   </div>
 )
-
+}
 export default FullRoster

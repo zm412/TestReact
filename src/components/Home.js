@@ -11,7 +11,7 @@ import Layout from './Header';
 
 export default function Home() {
 
-//  localStorage.setItem('users', JSON.stringify([ {id: 1, email: 'email', phoneNumber: '+7 8235352575', name: 'Firstname Lastname', status: 'client', created: new Date(), updated: new Date()} ]))
+  //localStorage.setItem('users', JSON.stringify([ {id: 1, email: 'email', phoneNumber: '+7 8235352575', name: 'Firstname Lastname', status: 'client', created: new Date(), updated: new Date()} ]))
 
   const [users, setUsers] = useState(JSON.parse(localStorage.getItem('users')));
 
@@ -99,17 +99,13 @@ export default function Home() {
   const filterBy = (e) => {
 
     e.preventDefault();
-    let idBox = e.target.closest('.box').id;
-    let key = idBox.split('');
-    key[0] = key[0].toLowerCase();
-    key = key.join('');
-    
+    let idBox = e.target.closest('.connect').dataset.connect.toLowerCase();
+    let key = idBox.toLowerCase();
     
     let search = eval( key );
     let store = JSON.parse(localStorage.getItem('users'));
-    let newStore = store.filter(item => {
-        return item[key] == search
-    });
+    let newStore = store.filter(item => item[key] == search
+    );
     setUsers(newStore);
     setNewItem(false);
     setIsCompressed(true);
