@@ -11,7 +11,9 @@ import Layout from './Header';
 
 export default function Home() {
 
-  //localStorage.setItem('users', JSON.stringify([ {id: 1, email: 'email', phoneNumber: '+7 8235352575', name: 'Firstname Lastname', status: 'client', created: new Date(), updated: new Date()} ]))
+  if(!localStorage.getItem('users')){
+    localStorage.setItem('users', JSON.stringify([ {id: 1, email: 'email', phoneNumber: '+7 8235352575', name: 'Firstname Lastname', status: 'client', created: new Date(), updated: new Date()} ]))
+  }
 
   const [users, setUsers] = useState(JSON.parse(localStorage.getItem('users')));
 
