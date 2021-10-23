@@ -3,10 +3,12 @@
   "version": "0.0.0",
   "description": "https://blog.pshrmn.com/entry/simple-react-router-v4-tutorial/",
   "keywords": [],
+  "homepage": "https://zm412.github.io/TestReact/",
   "main": "index.js",
   "dependencies": {
     "@material-ui/core": "^4.11.2",
     "@material-ui/icons": "^4.11.2",
+    "gh-pages": "^3.2.3",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.2",
@@ -20,6 +22,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   }
 }

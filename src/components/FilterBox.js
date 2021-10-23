@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper:{
     padding: '2px 4px',
-    margin: '15px 0',
+    margin: '15px 7px',
     display: 'flex',
     alignItems: 'center',
     width: 300,
@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
   buttonRemove:{
     justify: 'center',
     textAlign: 'center',
+    margin:'10px'
   }
 }));
 
